@@ -1,32 +1,34 @@
+import { createPortal } from "react-dom";
 import { CgInsights, CgList, CgMonday, CgProfile } from "react-icons/cg";
 import TabLink from "./TabLink";
 
 function Footer() {
-  return (
+  return createPortal(
     <footer className="bg-gray-100 py-2">
       <ul className="flex justify-between mx-2">
         <li>
           <TabLink to="/products" title="Продукты">
-            <CgMonday />
+            <CgMonday size={24} />
           </TabLink>
         </li>
         <li>
           <TabLink to="/diary" title="Дневник">
-            <CgList />
+            <CgList size={24} />
           </TabLink>
         </li>
         <li>
           <TabLink to="/reports" title="Отчёты">
-            <CgInsights />
+            <CgInsights size={24} />
           </TabLink>
         </li>
         <li>
           <TabLink to="/profile" title="Профиль">
-            <CgProfile />
+            <CgProfile size={24} />
           </TabLink>
         </li>
       </ul>
-    </footer>
+    </footer>,
+    document.querySelector("#footer") as HTMLElement
   );
 }
 

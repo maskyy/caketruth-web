@@ -7,7 +7,6 @@ import ReportsPage from "./pages/ReportsPage";
 
 function App() {
   return <div>
-    <h1>header 1</h1>
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<div>hello world</div>} />
