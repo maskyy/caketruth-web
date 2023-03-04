@@ -12,7 +12,7 @@ function TopSummary({ protein, fat, carbs, calories, rdi }: Summary) {
   ].map(value => typeof value === "string" ? value : value.toString());
 
   const renderedElements = values.map((value, idx) => {
-    return <TopSummaryText title={titles[idx]} text={value} />
+    return <TopSummaryText key={titles[idx]} title={titles[idx]} text={value} />
   })
   return (
     <div className="bg-gray-50 mx-2">

@@ -1,23 +1,14 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Footer from "./components/footer/Footer";
-import DiaryPage from "./pages/DiaryPage";
-import ProductsPage from "./pages/ProductsPage";
-import ProfilePage from "./pages/ProfilePage";
-import ReportsPage from "./pages/ReportsPage";
+import { BrowserRouter } from "react-router-dom";
+import { AppRouter } from "./components/AppRouter";
 
-function App() {
-  return <div>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<div>hello world</div>} />
-        <Route path="/products" element={<ProductsPage />} />
-        <Route path="/diary" element={<DiaryPage />} />
-        <Route path="/reports" element={<ReportsPage />} />
-        <Route path="/profile" element={<ProfilePage />} />
-      </Routes>
-      <Footer />
-    </BrowserRouter>
-  </div>;
+const App = () => {
+  return (
+    <div>
+      <BrowserRouter>
+        <AppRouter />
+      </BrowserRouter>
+    </div>
+  );
 }
 
 export default App;

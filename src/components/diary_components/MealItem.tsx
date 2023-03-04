@@ -2,8 +2,8 @@ import DiaryRecord from "../../types/DiaryRecord";
 
 function MealItem({ item, rdi }: { item: DiaryRecord, rdi: number }) {
   const macros = [item.proteins, item.fats, item.carbs, `${(item.calories / rdi).toFixed(2)}%`];
-  const renderedMacros = macros.map(macro => {
-    return <li>{macro}</li>
+  const renderedMacros = macros.map((macro, idx) => {
+    return <li key={idx}>{macro}</li>
   });
 
   return (

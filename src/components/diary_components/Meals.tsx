@@ -3,7 +3,7 @@ import Meal from "./Meal";
 function Meals({ mealList }: {
   mealList: string[]
 }) {
-  const meals = mealList.map(meal => <Meal name={meal} />);
+  const meals = mealList.map(meal => <Meal key={meal} name={meal} />);
 
   return (
     <div>

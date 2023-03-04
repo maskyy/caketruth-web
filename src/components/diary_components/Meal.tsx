@@ -49,7 +49,7 @@ function Meal({ name }: {
     },
   ];
 
-  const renderedItems = mealItems.map(item => <MealItem item={item} rdi={2200} />);
+  const renderedItems = mealItems.map((item, idx) => <MealItem key={idx} item={item} rdi={2200} />);
 
   return (
     <section className="relative bg-gray-200 mb-4">
