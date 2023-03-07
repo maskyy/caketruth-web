@@ -6,7 +6,7 @@ import TabLink from "./TabLink";
 const Footer: FC = () => {
   return createPortal(
     <footer className="bg-gray-100 py-2">
-      <ul className="flex justify-between mx-2">
+      <ul className="flex justify-between mx-4">
         <li>
           <TabLink to="/products" title="Продукты">
             <CgMonday size={24} />

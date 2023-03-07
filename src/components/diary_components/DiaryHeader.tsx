@@ -1,11 +1,24 @@
-import { FC } from "react";
-import Icon from "../../assets/img/ct-icon.svg";
+import { FC, useState } from "react";
+import DatePicker from "react-date-picker";
+import Header from "../header/Header";
 
 const DiaryHeader: FC = () => {
+  const [date, setDate] = useState(new Date());
+
+  const onDateChange = (value: Date) => {
+    console.log(value);
+    setDate(value);
+  }
   return (
-    <header>
-      <img src={Icon} alt="Логотип" />
-    </header>
+    <Header>
+      <DatePicker
+        className="self-end"
+        onChange={onDateChange}
+        value={date}
+        format="dd.MM.y"
+        locale="ru-RU"
+      />
+    </Header>
   );
 }
 

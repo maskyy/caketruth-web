@@ -1,10 +1,11 @@
 import { FC } from "react";
+import PageLayout from "../../layouts/PageLayout";
 
 const Reports: FC = () => {
   return (
-    <div>
-      reports
-    </div>
+    <PageLayout title="Отчёты" footer>
+      отчёты
+    </PageLayout>
   );
 }
 
