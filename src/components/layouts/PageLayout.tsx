@@ -1,5 +1,5 @@
 import { FC, ReactNode, useEffect } from "react";
-import Footer from "../footer/Footer";
+import { Footer } from "../footer/Footer";
 
 interface IPageLayoutProps {
   title: string;
@@ -8,7 +8,7 @@ interface IPageLayoutProps {
   footer: boolean;
 };
 
-const PageLayout: FC<IPageLayoutProps> = ({
+export const PageLayout: FC<IPageLayoutProps> = ({
   title,
   header,
   children,
@@ -26,5 +26,3 @@ const PageLayout: FC<IPageLayoutProps> = ({
     </main>
   );
 }
-
-export default PageLayout;

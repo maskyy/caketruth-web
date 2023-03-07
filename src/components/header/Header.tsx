@@ -5,7 +5,7 @@ interface IHeaderProps {
   children?: ReactNode
 };
 
-const Header: FC<IHeaderProps> = ({ children }) => {
+export const Header: FC<IHeaderProps> = ({ children }) => {
   return (
     <header className="bg-gray-100 pb-2">
       <div className="flex items-center gap-2 mx-2">
@@ -15,5 +15,3 @@ const Header: FC<IHeaderProps> = ({ children }) => {
     </header>
   );
 }
-
-export default Header;

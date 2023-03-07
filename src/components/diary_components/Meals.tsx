@@ -1,6 +1,6 @@
-import Meal from "./Meal";
+import { Meal } from "./Meal";
 
-function Meals({ mealList }: {
+export function Meals({ mealList }: {
   mealList: string[]
 }) {
   const meals = mealList.map(meal => <Meal key={meal} name={meal} />);
@@ -11,5 +11,3 @@ function Meals({ mealList }: {
     </div>
   );
 }
-
-export default Meals;

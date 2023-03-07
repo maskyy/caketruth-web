@@ -7,7 +7,7 @@ interface ITabLinkProps {
   title: string;
 };
 
-const TabLink: FC<ITabLinkProps> = ({ to, children, title }) => {
+export const TabLink: FC<ITabLinkProps> = ({ to, children, title }) => {
   return (
     <Link to={to} className="flex flex-col items-center">
       {children}
@@ -15,5 +15,3 @@ const TabLink: FC<ITabLinkProps> = ({ to, children, title }) => {
     </Link>
   );
 }
-
-export default TabLink;

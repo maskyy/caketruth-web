@@ -1,4 +1,4 @@
-interface DiaryRecord {
+export interface DiaryRecord {
   name: string,
   mass: number,
   calories: number,
@@ -6,5 +6,3 @@ interface DiaryRecord {
   fats: number,
   carbs: number,
 };
-
-export default DiaryRecord;

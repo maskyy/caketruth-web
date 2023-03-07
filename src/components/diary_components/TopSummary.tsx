@@ -1,7 +1,7 @@
-import Summary from "../../types/Summary";
-import TopSummaryText from "./TopSummaryText";
+import { Summary } from "../../types/Summary";
+import { TopSummaryText } from "./TopSummaryText";
 
-function TopSummary({ protein, fat, carbs, calories, rdi }: Summary) {
+export function TopSummary({ protein, fat, carbs, calories, rdi }: Summary) {
   const titles = ["Белки", "Жиры", "Углеводы", "Осталось", "Калории"];
   const values = [
     protein,
@@ -22,5 +22,3 @@ function TopSummary({ protein, fat, carbs, calories, rdi }: Summary) {
     </div>
   );
 }
-
-export default TopSummary;

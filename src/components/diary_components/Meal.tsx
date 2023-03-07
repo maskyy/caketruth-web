@@ -1,9 +1,9 @@
 import { CgMathPlus } from "react-icons/cg";
-import DiaryRecord from "../../types/DiaryRecord";
-import MealItem from "./MealItem";
-import MealSummary from "./MealSummary";
+import {DiaryRecord} from "../../types/DiaryRecord";
+import {MealItem} from "./MealItem";
+import {MealSummary} from "./MealSummary";
 
-function Meal({ name }: {
+export function Meal({ name }: {
   name: string
 }) {
   const mealItems: DiaryRecord[] = [
@@ -68,5 +68,3 @@ function Meal({ name }: {
     </section>
   );
 }
-
-export default Meal;

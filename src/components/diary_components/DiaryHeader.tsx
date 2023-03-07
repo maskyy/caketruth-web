@@ -1,8 +1,8 @@
 import { FC, useState } from "react";
 import DatePicker from "react-date-picker";
-import Header from "../header/Header";
+import { Header } from "../header/Header";
 
-const DiaryHeader: FC = () => {
+export const DiaryHeader: FC = () => {
   const [date, setDate] = useState(new Date());
 
   const onDateChange = (value: Date) => {
@@ -21,5 +21,3 @@ const DiaryHeader: FC = () => {
     </Header>
   );
 }
-
-export default DiaryHeader;

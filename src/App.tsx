@@ -1,7 +1,7 @@
 import { BrowserRouter } from "react-router-dom";
 import { AppRouter } from "./components/AppRouter";
 
-const App = () => {
+export const App = () => {
   return (
     <div>
       <BrowserRouter>
@@ -10,5 +10,3 @@ const App = () => {
     </div>
   );
 }
-
-export default App;

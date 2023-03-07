@@ -1,4 +1,4 @@
-function TopSummaryText({ title, text}: {
+export function TopSummaryText({ title, text }: {
   title: string,
   text: string
 }) {
@@ -9,5 +9,3 @@ function TopSummaryText({ title, text}: {
     </li>
   );
 }
-
-export default TopSummaryText;

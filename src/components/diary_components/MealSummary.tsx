@@ -1,6 +1,6 @@
-import Summary from "../../types/Summary";
+import { Summary } from "../../types/Summary";
 
-function MealSummary({ protein, fat, carbs, calories, rdi}: Summary) {
+export function MealSummary({ protein, fat, carbs, calories, rdi }: Summary) {
   const values = [protein, fat, carbs, calories / rdi, calories].map((value, idx) => {
     return value.toFixed(idx > 2 ? 0 : 2);
   });
@@ -12,5 +12,3 @@ function MealSummary({ protein, fat, carbs, calories, rdi}: Summary) {
     </ul>
   );
 }
-
-export default MealSummary;

@@ -1,10 +1,10 @@
 import { FC } from "react";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
-import Header from "../../header/Header";
-import PageLayout from "../../layouts/PageLayout";
+import { Header } from "../../header/Header";
+import { PageLayout } from "../../layouts/PageLayout";
 import "react-tabs/style/react-tabs.css";
 
-const Products: FC = () => {
+export const Products: FC = () => {
   const products = [
     { name: "ВкусВилл Творог 5%", calories: 117 },
     { name: "Перекрёсток Авокадо Хасс", calories: 160 },
@@ -52,5 +52,3 @@ const Products: FC = () => {
     </PageLayout>
   );
 }
-
-export default Products;
