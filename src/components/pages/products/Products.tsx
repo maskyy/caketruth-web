@@ -3,6 +3,7 @@ import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 import { Header } from "../../header/Header";
 import { PageLayout } from "../../layouts/PageLayout";
 import "react-tabs/style/react-tabs.css";
+import { Link } from "react-router-dom";
 
 export const Products: FC = () => {
   const products = [
@@ -17,12 +18,24 @@ export const Products: FC = () => {
     { name: "Банановые панкейки", calories: 270 },
   ];
 
-  const renderedProducts = products.map(p => {
-    return <li className="border-green-200 border-b-2">{p.name}<br />{p.calories} ккал (100 г)</li>;
+  const renderedProducts = products.map((p, idx) => {
+    return (
+      <Link key={idx} to={`/products/${idx}`}>
+        <li className="border-green-200 border-b-2">
+          {p.name}
+          <br />
+          {p.calories} ккал (100 г)
+        </li>
+      </Link>
+    );
   });
 
-  const renderedRecipes = recipes.map(r => {
-    return <li className="border-green-200 border-b-2">{r.name}<br />{r.calories} ккал (100 г)</li>;
+  const renderedRecipes = recipes.map((r, idx) => {
+    return (
+      <Link key={idx} to={`/recipes/${idx}`}>
+        <li key={idx} className="border-green-200 border-b-2">{r.name}<br />{r.calories} ккал (100 г)</li>
+      </Link>
+    );
   });
 
   return (
