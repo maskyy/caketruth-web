@@ -1,9 +1,9 @@
 import { Food } from "./Food";
-import { Product } from "./Product";
+import { Ingredient } from "./Ingredient";
 
 export interface Recipe extends Food {
   directions: string,
   mass: number,
   recipe_category: string,
-  ingredients: Product[],
+  ingredients: Ingredient[],
 };

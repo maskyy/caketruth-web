@@ -8,6 +8,7 @@ import { Profile } from "../components/pages/profile/Profile";
 import { ViewRecipe } from "../components/pages/viewRecipe/ViewRecipe";
 import { Reports } from "../components/pages/reports/Reports";
 import { Welcome } from "../components/pages/welcome/Welcome";
+import { EditRecord } from "../components/pages/editRecord/EditRecord";
 
 interface route {
   path: string,
@@ -25,6 +26,7 @@ const routes: route[] = [
   { path: "/recipes/new", component: EditRecipe },
   { path: "/recipes/:recipeId/edit", component: EditRecipe },
   { path: "/diary", component: Diary },
+  { path: "/diary/:recordId/edit", component: EditRecord },
   { path: "/reports", component: Reports },
   { path: "/profile", component: Profile },
 ];

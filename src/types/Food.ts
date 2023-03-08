@@ -5,7 +5,7 @@ export interface Food {
   proteins: number,
   fats: number,
   carbs: number,
-  ethanol: number,
+  ethanol?: number,
   is_public: boolean,
   is_verified: boolean,
   type: string,
