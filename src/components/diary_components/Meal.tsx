@@ -16,8 +16,8 @@ export function Meal({ name }: {
       <p className="text-lg text-center">{name}</p>
       <CgMathPlus className="absolute right-4 top-2" />
       <MealSummary
-        protein={11.22}
-        fat={12.34}
+        proteins={11.22}
+        fats={12.34}
         carbs={34.56}
         calories={234}
         rdi={2200}

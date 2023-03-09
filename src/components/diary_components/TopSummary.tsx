@@ -1,11 +1,17 @@
+import { FC } from "react";
 import { Summary } from "../../types/Summary";
 import { TopSummaryText } from "./TopSummaryText";
 
-export function TopSummary({ protein, fat, carbs, calories, rdi }: Summary) {
+interface ITopSummaryProps {
+  summary: Summary
+};
+
+export const TopSummary: FC<ITopSummaryProps> = (props) => {
+  const { proteins, fats, carbs, calories, rdi } = props.summary;
   const titles = ["Белки", "Жиры", "Углеводы", "Осталось", "Калории"];
   const values = [
-    protein,
-    fat,
+    proteins,
+    fats,
     carbs,
     `${rdi - calories} (${Math.round(calories / rdi * 100)}%)`,
     calories

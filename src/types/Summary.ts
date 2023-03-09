@@ -1,6 +1,6 @@
 export interface Summary {
-  protein: number,
-  fat: number,
+  proteins: number,
+  fats: number,
   carbs: number,
   calories: number,
   rdi: number

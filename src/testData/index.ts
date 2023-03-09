@@ -1,6 +1,7 @@
 import { DiaryRecord } from "../types/DiaryRecord";
 import { Product } from "../types/Product";
 import { Recipe } from "../types/Recipe";
+import { Summary } from "../types/Summary";
 import { User } from "../types/User";
 
 export const users: User[] = [
@@ -135,6 +136,8 @@ export const recipes: Recipe[] = [
   },
 ];
 
+export const mealList = ["Завтрак", "Обед", "Полдник", "Ужин"];
+
 export const mealItems: DiaryRecord[] = [
   {
     id: 1,
@@ -182,3 +185,11 @@ export const mealItems: DiaryRecord[] = [
     carbs: 23.9,
   },
 ];
+
+export const daySummary: Summary = {
+  proteins: 123.45,
+  fats: 123.45,
+  carbs: 123.45,
+  calories: 1234,
+  rdi: 2200,
+};
