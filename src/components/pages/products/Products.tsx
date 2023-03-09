@@ -3,10 +3,11 @@ import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 import { Header } from "../../header/Header";
 import { PageLayout } from "../../layouts/PageLayout";
 import "react-tabs/style/react-tabs.css";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { products, recipes } from "../../../testData";
 
 export const Products: FC = () => {
+  const location = useLocation();
 
   const renderedProducts = products.map((p, idx) => {
     const formattedName = `${p.product_brand} ${p.name}`;
@@ -37,7 +38,7 @@ export const Products: FC = () => {
           <h1 className="self-end">Продукты</h1>
         </Header>
       } footer>
-      <Tabs>
+      <Tabs defaultIndex={location.pathname === "/recipes" ? 1 : 0}>
         <TabList>
           <Tab>Продукты</Tab>
           <Tab>Рецепты</Tab>

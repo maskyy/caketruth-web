@@ -1,4 +1,5 @@
 import { DiaryRecord } from "../types/DiaryRecord";
+import { Meal } from "../types/Meal";
 import { Product } from "../types/Product";
 import { Recipe } from "../types/Recipe";
 import { Summary } from "../types/Summary";
@@ -92,7 +93,7 @@ export const recipeCategories = ["Завтрак", "Обед", "Нема"];
 
 export const recipes: Recipe[] = [
   {
-    id: 1,
+    id: 1001,
     name: "Банановая запеканка",
     calories: 150,
     proteins: 10,
@@ -116,7 +117,7 @@ export const recipes: Recipe[] = [
     ],
   },
   {
-    id: 2,
+    id: 1002,
     name: "Пюре из авокадо и бананов",
     calories: 345,
     proteins: 12,
@@ -136,7 +137,12 @@ export const recipes: Recipe[] = [
   },
 ];
 
-export const mealList = ["Завтрак", "Обед", "Полдник", "Ужин"];
+export const mealList: Meal[] = [
+  { id: 1, name: "Завтрак" },
+  { id: 2, name: "Обед" },
+  { id: 3, name: "Полдник" },
+  { id: 4, name: "Ужин" },
+];
 
 export const mealItems: DiaryRecord[] = [
   {

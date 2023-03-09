@@ -1,9 +1,10 @@
-import { Meal } from "./Meal";
+import { Meal } from "../../types/Meal";
+import { MealBlock } from "./MealBlock";
 
 export function Meals({ mealList }: {
-  mealList: string[]
+  mealList: Meal[]
 }) {
-  const meals = mealList.map(meal => <Meal key={meal} name={meal} />);
+  const meals = mealList.map(meal => <MealBlock key={meal.id} name={meal.name} />);
 
   return (
     <div>
