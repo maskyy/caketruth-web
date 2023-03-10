@@ -22,6 +22,7 @@ export function MealBlock({ name }: {
         carbs={34.56}
         calories={234}
         rdi={2200}
+        date=""
       />
       <ul>
         {renderedItems}

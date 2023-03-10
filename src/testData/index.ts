@@ -198,4 +198,64 @@ export const daySummary: Summary = {
   carbs: 123.45,
   calories: 1234,
   rdi: 2200,
+  date: "2022-03-10"
 };
+
+export const reportsData: Summary[] = [
+  {
+    proteins: 20,
+    fats: 30,
+    carbs: 40,
+    calories: 1400,
+    rdi: 1500,
+    date: "2022-03-06",
+  },
+  {
+    proteins: 50,
+    fats: 0,
+    carbs: 20,
+    calories: 900,
+    rdi: 2200,
+    date: "2022-03-07",
+  },
+  {
+    proteins: 60,
+    fats: 90,
+    carbs: 70,
+    calories: 1945,
+    rdi: 2100,
+    date: "2022-03-08",
+  },
+  {
+    proteins: 80,
+    fats: 80,
+    carbs: 80,
+    calories: 1900,
+    rdi: 2200,
+    date: "2022-03-09",
+  },
+  {
+    proteins: 140,
+    fats: 70,
+    carbs: 400,
+    calories: 2800,
+    rdi: 2200,
+    date: "2022-03-10",
+  },
+  {
+    proteins: 90,
+    fats: 90,
+    carbs: 90,
+    calories: 2100,
+    rdi: 2300,
+    date: "2022-03-11",
+  },
+  {
+    proteins: 80,
+    fats: 80,
+    carbs: 80,
+    calories: 2250,
+    rdi: 2200,
+    date: "2022-03-12",
+  },
+];

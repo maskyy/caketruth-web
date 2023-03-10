@@ -3,5 +3,6 @@ export interface Summary {
   fats: number,
   carbs: number,
   calories: number,
-  rdi: number
+  rdi: number,
+  date: string
 };
