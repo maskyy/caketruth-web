@@ -5,18 +5,25 @@ import { Recipe } from "../types/Recipe";
 import { Summary } from "../types/Summary";
 import { User } from "../types/User";
 
+const userRole: User["role"] = {
+  name: "user",
+  title: "Пользователь"
+};
+
 export const users: User[] = [
   {
     id: 1,
     email: "eaa1991@aa.com",
-    nickname: "eaa1991",
-    role: "user",
+    username: "eaa1991",
+    blocked_until: null,
+    role: userRole,
   },
   {
     id: 2,
     email: "me@me.org",
-    nickname: "me",
-    role: "user",
+    username: "me",
+    blocked_until: null,
+    role: userRole,
   },
 ];
 

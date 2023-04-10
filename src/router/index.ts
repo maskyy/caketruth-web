@@ -9,13 +9,15 @@ import { ViewRecipe } from "../components/pages/viewRecipe/ViewRecipe";
 import { Reports } from "../components/pages/reports/Reports";
 import { Welcome } from "../components/pages/welcome/Welcome";
 import { EditRecord } from "../components/pages/editRecord/EditRecord";
+import { Login } from "../components/pages/login/Login";
+import { SignUp } from "../components/pages/signUp/SignUp";
 
 interface route {
   path: string,
   component: FC
 }
 
-const routes: route[] = [
+export const routes: route[] = [
   { path: "/", component: Welcome },
   { path: "/products", component: Products },
   { path: "/recipes", component: Products },
@@ -29,11 +31,11 @@ const routes: route[] = [
   { path: "/diary/:recordId/edit", component: EditRecord },
   { path: "/reports", component: Reports },
   { path: "/profile", component: Profile },
+  { path: "/login", component: Login },
+  { path: "/signup", component: SignUp },
 ];
 
 // TODO
-const authRoutes: route[] = [
+export const authRoutes: route[] = [
 
 ];
-
-export { routes, authRoutes };
