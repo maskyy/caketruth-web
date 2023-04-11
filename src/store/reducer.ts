@@ -1,7 +1,7 @@
 import { createReducer } from "@reduxjs/toolkit";
 import { User } from "../types/User";
 import { AuthStatus } from "../types/AuthStatus";
-import { fetchUser, loginUser, logoutUser, refreshToken, registerUser, updateUser } from "./action";
+import { fetchUser, loginUser, logoutUser, refreshToken, registerUser, setAuthStatus, updateUser } from "./action";
 import { Token } from "../util/token";
 import { getAuthStatus } from "../util/util";
 
@@ -35,6 +35,7 @@ export const reducer = createReducer(initialState, (builder) => {
     .addCase(logoutUser.fulfilled, (state, action) => {
       Token.drop();
       state.authStatus = AuthStatus.NoAuth;
+      state.user = null;
     })
     .addCase(fetchUser.fulfilled, (state, action) => {
       state.authStatus = getAuthStatus(action.payload);
@@ -46,4 +47,7 @@ export const reducer = createReducer(initialState, (builder) => {
         state.user = action.payload;
       }
     })
+    .addCase(setAuthStatus, (state, action) => {
+      state.authStatus = action.payload;
+    });
 });

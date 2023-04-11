@@ -11,6 +11,7 @@ import { Welcome } from "../components/pages/welcome/Welcome";
 import { EditRecord } from "../components/pages/editRecord/EditRecord";
 import { Login } from "../components/pages/login/Login";
 import { SignUp } from "../components/pages/signUp/SignUp";
+import { Logout } from "../components/pages/logout/Logout";
 
 interface route {
   path: string,
@@ -22,20 +23,20 @@ export const routes: route[] = [
   { path: "/products", component: Products },
   { path: "/recipes", component: Products },
   { path: "/products/:productId", component: ViewProduct },
-  { path: "/products/new", component: EditProduct },
-  { path: "/products/:productId/edit", component: EditProduct },
   { path: "/recipes/:recipeId", component: ViewRecipe },
   { path: "/recipes/new", component: EditRecipe },
-  { path: "/recipes/:recipeId/edit", component: EditRecipe },
-  { path: "/diary", component: Diary },
-  { path: "/diary/:recordId/edit", component: EditRecord },
-  { path: "/reports", component: Reports },
-  { path: "/profile", component: Profile },
   { path: "/login", component: Login },
   { path: "/signup", component: SignUp },
 ];
 
 // TODO
 export const authRoutes: route[] = [
-
+  { path: "/logout", component: Logout },
+  { path: "/products/new", component: EditProduct },
+  { path: "/products/:productId/edit", component: EditProduct },
+  { path: "/recipes/:recipeId/edit", component: EditRecipe },
+  { path: "/diary", component: Diary },
+  { path: "/diary/:recordId/edit", component: EditRecord },
+  { path: "/reports", component: Reports },
+  { path: "/profile", component: Profile },
 ];

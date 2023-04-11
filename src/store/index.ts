@@ -2,7 +2,8 @@ import { configureStore } from "@reduxjs/toolkit";
 import { reducer } from "./reducer";
 import { api } from "../api";
 import { Token } from "../util/token";
-import { fetchUser } from "./action";
+import { fetchUser, setAuthStatus } from "./action";
+import { AuthStatus } from "../types/AuthStatus";
 
 export const store = configureStore({
   reducer,
@@ -16,5 +17,6 @@ export const store = configureStore({
 });
 
 if (Token.getId()) {
+  store.dispatch(setAuthStatus(AuthStatus.Unknown));
   store.dispatch(fetchUser(Token.getId()));
 }

@@ -1,7 +1,8 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
+import { createAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { AxiosError, AxiosInstance } from "axios";
 import { User, UserAuth, UserSignup, UserUpdate } from "../types/User";
 import { AuthResponse, ServerErrors } from "../types/api";
+import { AuthStatus } from "../types/AuthStatus";
 
 interface Extra {
   api: AxiosInstance;
@@ -14,6 +15,7 @@ export const Action = {
   LOGOUT_USER: "user/logout",
   FETCH_USER: "user/fetch",
   UPDATE_USER: "user/update",
+  SET_AUTH_STATUS: "authStatus/set",
 };
 
 export const registerUser = createAsyncThunk<User, UserSignup, { extra: Extra }>(
@@ -81,6 +83,12 @@ export const updateUser = createAsyncThunk<User, UserUpdate, { extra: Extra }>(
     const { id } = user;
     const newData = { ...user };
     delete newData.id;
+    Object.keys(newData).forEach((k) => {
+      if (!(newData as {[k: string]: number | string})[k]) {
+        delete (newData as {[k: string]: number | string})[k];
+      }
+    });
+
     try {
       const { data } = await api.patch<User>(`/users/${id}/`, newData);
       return data;
@@ -89,3 +97,5 @@ export const updateUser = createAsyncThunk<User, UserUpdate, { extra: Extra }>(
     }
   }
 )
+
+export const setAuthStatus = createAction<AuthStatus>(Action.SET_AUTH_STATUS);

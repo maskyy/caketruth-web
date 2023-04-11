@@ -14,7 +14,8 @@ export type UserSignup = Pick<User, 'email' | 'username'> & {
   password_confirm: string;
 };
 export type UserAuth = Pick<User, 'email'> & { password: string };
-export type UserUpdate = Partial<User> & {
+export type UserUpdate = Partial<Omit<User, "role">> & {
+  role?: number;
   password?: string;
   password_confirm?: string;
 };
