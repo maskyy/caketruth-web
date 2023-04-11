@@ -4,30 +4,36 @@ import { AuthStatus } from "../types/AuthStatus";
 import { fetchUser, loginUser, logoutUser, refreshToken, registerUser, setAuthStatus, updateUser } from "./action";
 import { Token } from "../util/token";
 import { getAuthStatus } from "../util/util";
+import { ServerErrors } from "../types/api";
 
 type State = {
   authStatus: AuthStatus;
   user: User | null;
-  errors: string[];
+  errors: ServerErrors | null;
+  registered: boolean;
 };
 
 const initialState: State = {
   authStatus: AuthStatus.NoAuth,
   user: null,
-  errors: [],
+  errors: null,
+  registered: false,
 };
 
 export const reducer = createReducer(initialState, (builder) => {
   builder
     .addCase(registerUser.fulfilled, (state, action) => {
-      // TODO signup success?
+      state.registered = true;
+    })
+    .addCase(registerUser.rejected, (state, action) => {
+      state.errors = action.payload as ServerErrors;
     })
     .addCase(loginUser.fulfilled, (state, action) => {
       Token.save(action.payload);
       state.authStatus = AuthStatus.Unknown;
     })
     .addCase(loginUser.rejected, (state, action) => {
-      state.errors = [(action.payload as { detail: string }).detail];
+      state.errors = action.payload as ServerErrors;
     })
     .addCase(refreshToken.fulfilled, (state, action) => {
       Token.save(action.payload);

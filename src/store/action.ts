@@ -20,14 +20,17 @@ export const Action = {
 
 export const registerUser = createAsyncThunk<User, UserSignup, { extra: Extra }>(
   Action.REGISTER_USER,
-  async (signupData, { extra }) => {
+  async (signupData, { extra, rejectWithValue }) => {
     const { api } = extra;
     try {
       const { data } = await api.post<User>("/users/", signupData);
       return data;
-    } catch (error) {
-      const axiosError = error as AxiosError;
-      return Promise.reject(error);
+    } catch (err) {
+      let error = err as AxiosError<ServerErrors>;
+      if (!error.response) {
+        throw error;
+      }
+      return rejectWithValue(error.response?.data);
     }
   }
 );

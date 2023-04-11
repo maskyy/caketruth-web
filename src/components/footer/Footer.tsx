@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { createPortal } from "react-dom";
-import { CgInsights, CgList, CgLogIn, CgMonday, CgProfile } from "react-icons/cg";
+import { CgInsights, CgList, CgLogIn, CgMonday, CgProfile, CgUserAdd } from "react-icons/cg";
 import { TabLink } from "./TabLink";
 import { useAppSelector } from "../../hooks";
 import { AuthStatus } from "../../types/AuthStatus";
@@ -20,6 +20,11 @@ export const Footer: FC = () => {
           <li>
             <TabLink to="/login" title="Войти">
               <CgLogIn size={24} />
+            </TabLink>
+          </li>
+          <li>
+            <TabLink to="/signup" title="Регистрация">
+              <CgUserAdd size={24} />
             </TabLink>
           </li>
           </>

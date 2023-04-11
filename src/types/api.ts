@@ -1,8 +1,5 @@
 export interface ServerErrors {
-  errors?: {
-    [key: string]: string | string[];
-  };
-  detail?: string;
+  [key: string]: string | string[];
 }
 
 export interface AuthResponse {

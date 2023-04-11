@@ -46,8 +46,8 @@ export const Login = () => {
         <div className="flex justify-center">
           <button type="submit">Войти</button>
         </div>
-        {errors.length > 0 && <div>{errors[0]}</div>}
+        {errors && <div>{errors.detail}</div>}
       </form>
     </PageLayout>
-  )
-}
+  );
+};
