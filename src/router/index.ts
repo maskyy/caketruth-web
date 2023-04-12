@@ -1,4 +1,3 @@
-import { FC } from "react";
 import { Diary } from "../components/pages/diary/Diary";
 import { EditProduct } from "../components/pages/editProduct/EditProduct";
 import { EditRecipe } from "../components/pages/editRecipe/EditRecipe";
@@ -14,8 +13,8 @@ import { SignUp } from "../components/pages/signUp/SignUp";
 import { Logout } from "../components/pages/logout/Logout";
 
 interface route {
-  path: string,
-  component: FC
+  path: string;
+  component: () => JSX.Element;
 }
 
 export const routes: route[] = [
@@ -29,7 +28,6 @@ export const routes: route[] = [
   { path: "/signup", component: SignUp },
 ];
 
-// TODO
 export const authRoutes: route[] = [
   { path: "/logout", component: Logout },
   { path: "/products/new", component: EditProduct },

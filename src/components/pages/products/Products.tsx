@@ -1,4 +1,3 @@
-import { FC } from "react";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 import { Header } from "../../header/Header";
 import { PageLayout } from "../../layouts/PageLayout";
@@ -6,7 +5,7 @@ import "react-tabs/style/react-tabs.css";
 import { Link, useLocation } from "react-router-dom";
 import { products, recipes } from "../../../testData";
 
-export const Products: FC = () => {
+export const Products = () => {
   const location = useLocation();
 
   const renderedProducts = products.map((p, idx) => {

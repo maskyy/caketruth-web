@@ -1,4 +1,4 @@
-import { FC, useEffect, useReducer } from "react";
+import { useEffect, useReducer } from "react";
 import DatePicker from "react-date-picker";
 import { Bar, BarChart, Cell, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { Header } from "../../header/Header";
@@ -55,7 +55,7 @@ const reportDataReducer = (state: IReportDataState, action: ReportDataAction): I
   return { ...newState };
 }
 
-export const Reports: FC = () => {
+export const Reports = () => {
   const [state, dispatch] = useReducer(reportDataReducer, {
     start: new Date(),
     end: new Date(),

@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import { CgArrowLeft } from "react-icons/cg";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { mealList, products } from "../../../testData";
@@ -18,7 +18,7 @@ const titles: string[][] = [
 
 const dependsOnMass = ["calories", "proteins", "fats", "carbs", "ethanol"];
 
-export const ViewProduct: FC = () => {
+export const ViewProduct = () => {
   const navigate = useNavigate();
   const productId = Number(useParams().productId);
   const [mass, setMass] = useState(100);

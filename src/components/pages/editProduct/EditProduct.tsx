@@ -1,9 +1,7 @@
-import { FC } from "react";
 import { useParams } from "react-router-dom";
 import { PageLayout } from "../../layouts/PageLayout";
-interface IEditProductProps { };
 
-export const EditProduct: FC<IEditProductProps> = (props) => {
+export const EditProduct = () => {
   const { productId } = useParams();
   return (
     <PageLayout title="Редактирование продукта" footer={false}>

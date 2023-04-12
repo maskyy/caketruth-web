@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import { CgArrowLeft } from "react-icons/cg";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { mealList, recipes } from "../../../testData";
@@ -17,7 +17,7 @@ const titles: string[][] = [
 
 const dependsOnMass = ["calories", "proteins", "fats", "carbs", "ethanol"];
 
-export const ViewRecipe: FC = () => {
+export const ViewRecipe = () => {
   const recipeId = Number(useParams().recipeId);
   const recipe = recipes.find(r => r.id === recipeId)!;
 

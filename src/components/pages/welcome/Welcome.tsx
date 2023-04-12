@@ -1,7 +1,6 @@
-import { FC } from "react";
 import { PageLayout } from "../../layouts/PageLayout";
 
-export const Welcome: FC = () => {
+export const Welcome = () => {
   return (
     <PageLayout title="CakeTruth" footer>
       hello world
