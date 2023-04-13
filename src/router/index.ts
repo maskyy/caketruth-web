@@ -12,6 +12,7 @@ import { Login } from "../components/pages/login/Login";
 import { SignUp } from "../components/pages/signUp/SignUp";
 import { Logout } from "../components/pages/logout/Logout";
 import { Meals } from "../components/pages/meals/Meals";
+import { NotFound } from "../components/pages/not-found/NotFound";
 
 interface route {
   path: string;
@@ -27,6 +28,7 @@ export const routes: route[] = [
   { path: "/recipes/new", component: EditRecipe },
   { path: "/login", component: Login },
   { path: "/signup", component: SignUp },
+  { path: "*", component: NotFound },
 ];
 
 export const authRoutes: route[] = [

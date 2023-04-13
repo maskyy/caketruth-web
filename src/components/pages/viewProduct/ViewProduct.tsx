@@ -1,9 +1,12 @@
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { CgArrowLeft } from "react-icons/cg";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { mealList, products } from "../../../testData";
 import { Header } from "../../header/Header";
 import { PageLayout } from "../../layouts/PageLayout";
+import { useAppDispatch, useAppSelector } from "../../../hooks";
+import { Spinner } from "../../spinner/Spinner";
+import { NotFound } from "../not-found/NotFound";
+import { fetchProduct } from "../../../store/action";
 
 const titles: string[][] = [
   ["calories", "Калориийность", "ккал"],
@@ -19,20 +22,41 @@ const titles: string[][] = [
 const dependsOnMass = ["calories", "proteins", "fats", "carbs", "ethanol"];
 
 export const ViewProduct = () => {
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const productId = Number(useParams().productId);
+  const product = useAppSelector((state) => state.product);
+  const isLoading = useAppSelector((state) => state.isLoading);
+  const meals = useAppSelector((state) => state.meals);
+  const productCategories = useAppSelector((state) => state.productCategories);
+
   const [mass, setMass] = useState(100);
   const [meal, setMeal] = useState(0);
 
-  const renderedMeals = mealList.map(meal => {
+  useEffect(() => {
+    if (productId) {
+      dispatch(fetchProduct(productId));
+    }
+  }, [dispatch, productId]);
+
+  if (isLoading) {
+    return <Spinner />;
+  }
+  if (!product) {
+    return <NotFound />;
+  }
+
+  const renderedMeals = meals.map(meal => {
     return <option key={meal.id} value={meal.id}>{meal.name}</option>
   });
 
-  const product = products.find(p => p.id === productId)!;
+  //const product = products.find(p => p.id === productId)!;
   const productEntries = Object.entries(product);
+
+  // FIXME...
   const renderedData = productEntries.map(entry => {
     let translation = titles.find(t => t[0] === entry[0]);
-    if (translation === undefined) {
+    if (translation === undefined || !entry[1]) {
       return null;
     }
     const title = translation[1];

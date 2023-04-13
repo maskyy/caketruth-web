@@ -113,7 +113,7 @@ export const recipes: Recipe[] = [
 5. Выпекать в форме при 190 C 30 мин`,
     mass: 1200,
     recipe_category: "Завтрак",
-    ingredients: [
+    products: [
       { product: products[0], mass: 500 },
       { product: products[1], mass: 250 },
     ],
@@ -131,7 +131,7 @@ export const recipes: Recipe[] = [
     directions: `test`,
     mass: 600,
     recipe_category: "Обед",
-    ingredients: [
+    products: [
       { product: products[1], mass: 123 },
       { product: products[2], mass: 345 },
     ],

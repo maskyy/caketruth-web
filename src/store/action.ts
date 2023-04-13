@@ -4,6 +4,9 @@ import { User, UserAuth, UserSignup, UserUpdate } from "../types/User";
 import { AuthResponse, ServerErrors } from "../types/api";
 import { AuthStatus } from "../types/AuthStatus";
 import { Meal } from "../types/Meal";
+import { BasicProduct, Product } from "../types/Product";
+import { BasicRecipe, Recipe } from "../types/Recipe";
+import { Category } from "../types/Category";
 
 interface Extra {
   api: AxiosInstance;
@@ -19,6 +22,13 @@ export const Action = {
   SET_AUTH_STATUS: "authStatus/set",
   FETCH_MEALS: "meals/fetch",
   SET_MEALS: "meals/set",
+  FETCH_PRODUCTS: "products/fetch",
+  FETCH_RECIPES: "recipes/fetch",
+  FETCH_PRODUCT_CATEGORIES: "productCategories/fetch",
+  FETCH_PRODUCT_BRANDS: "productBrands/fetch",
+  FETCH_RECIPE_CATEGORIES: "recipeCategories/fetch",
+  FETCH_PRODUCT: "product/fetch",
+  FETCH_RECIPE: "recipe/fetch",
 };
 
 export const registerUser = createAsyncThunk<User, UserSignup, { extra: Extra }>(
@@ -124,7 +134,69 @@ export const setMeals = createAsyncThunk<Meal[], string[], { extra: Extra }>(
       const response = await api.post<Meal>("/meals/", { name });
       data.push(response.data);
     }
-    console.log(data);
+    return data;
+  }
+);
+
+export const fetchProducts = createAsyncThunk<BasicProduct[], undefined, { extra: Extra}>(
+  Action.FETCH_PRODUCTS,
+  async (_, { extra }) => {
+    const { api } = extra;
+    const { data } = await api.get<BasicProduct[]>("/products/");
+    return data;
+  }
+);
+
+export const fetchRecipes = createAsyncThunk<BasicRecipe[], undefined, { extra: Extra}>(
+  Action.FETCH_RECIPES,
+  async (_, { extra }) => {
+    const { api } = extra;
+    const { data } = await api.get<BasicRecipe[]>("/recipes/");
+    return data;
+  }
+);
+
+export const fetchProductCategories = createAsyncThunk<Category[], undefined, { extra: Extra}>(
+  Action.FETCH_PRODUCT_CATEGORIES,
+  async (_, { extra }) => {
+    const { api } = extra;
+    const { data } = await api.get<Category[]>("/product-categories/");
+    return data;
+  }
+);
+
+export const fetchProductBrands = createAsyncThunk<Category[], undefined, { extra: Extra}>(
+  Action.FETCH_PRODUCT_BRANDS,
+  async (_, { extra }) => {
+    const { api } = extra;
+    const { data } = await api.get<Category[]>("/product-brands/");
+    return data;
+  }
+);
+
+export const fetchRecipeCategories = createAsyncThunk<Category[], undefined, { extra: Extra}>(
+  Action.FETCH_RECIPE_CATEGORIES,
+  async (_, { extra }) => {
+    const { api } = extra;
+    const { data } = await api.get<Category[]>("/recipe-categories/");
+    return data;
+  }
+);
+
+export const fetchProduct = createAsyncThunk<Product, number, { extra: Extra }>(
+  Action.FETCH_PRODUCT,
+  async (id, { extra }) => {
+    const { api } = extra;
+    const { data } = await api.get<Product>(`/products/${id}`);
+    return data;
+  }
+);
+
+export const fetchRecipe = createAsyncThunk<Recipe, number, { extra: Extra }>(
+  Action.FETCH_RECIPE,
+  async (id, { extra }) => {
+    const { api } = extra;
+    const { data } = await api.get<Recipe>(`/recipes/${id}`);
     return data;
   }
 );

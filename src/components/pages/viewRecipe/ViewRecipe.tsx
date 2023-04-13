@@ -1,9 +1,13 @@
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { CgArrowLeft } from "react-icons/cg";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { mealList, recipes } from "../../../testData";
 import { Header } from "../../header/Header";
 import { PageLayout } from "../../layouts/PageLayout";
+import { useAppDispatch, useAppSelector } from "../../../hooks";
+import { fetchRecipe } from "../../../store/action";
+import { Spinner } from "../../spinner/Spinner";
+import { NotFound } from "../not-found/NotFound";
 
 const titles: string[][] = [
   ["calories", "Калориийность", "ккал"],
@@ -18,18 +22,35 @@ const titles: string[][] = [
 const dependsOnMass = ["calories", "proteins", "fats", "carbs", "ethanol"];
 
 export const ViewRecipe = () => {
+  const dispatch = useAppDispatch();
   const recipeId = Number(useParams().recipeId);
-  const recipe = recipes.find(r => r.id === recipeId)!;
+  const recipe = useAppSelector((state) => state.recipe);
+  const isLoading = useAppSelector((state) => state.isLoading);
+  const meals = useAppSelector((state) => state.meals);
+  const recipeCategories = useAppSelector((state) => state.recipeCategories);
 
   const navigate = useNavigate();
-  const [mass, setMass] = useState(recipe.mass);
+  const [mass, setMass] = useState(recipe?.mass ?? 100);
   const [meal, setMeal] = useState(0);
+
+  useEffect(() => {
+    if (recipeId) {
+      dispatch(fetchRecipe(recipeId));
+    }
+  }, [dispatch, recipeId]);
+
+  if (isLoading) {
+    return <Spinner />;
+  }
+  if (!recipe) {
+    return <NotFound />;
+  }
 
   const renderedMeals = mealList.map(meal => {
     return <option key={meal.id} value={meal.id}>{meal.name}</option>
   });
 
-  const recipeEntries = Object.entries(recipe);
+  const recipeEntries = Object.entries(recipe ?? {});
   const renderedData = recipeEntries.map(entry => {
     let translation = titles.find(t => t[0] === entry[0]);
     if (translation === undefined) {
@@ -51,7 +72,7 @@ export const ViewRecipe = () => {
     );
   });
 
-  const renderedIngedients = recipe.ingredients.map((p, idx) => {
+  const renderedIngedients = recipe?.products.map((p, idx) => {
     const title = `${p.product.product_brand} ${p.product.name}`;
     return (
       <tr key={p.product.name} className="border-y border-gray-300">

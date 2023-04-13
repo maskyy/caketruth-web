@@ -2,7 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import { reducer } from "./reducer";
 import { api } from "../api";
 import { Token } from "../util/token";
-import { fetchMeals, fetchUser, setAuthStatus } from "./action";
+import { fetchMeals, fetchProductBrands, fetchProductCategories, fetchProducts, fetchRecipeCategories, fetchRecipes, fetchUser, setAuthStatus } from "./action";
 import { AuthStatus } from "../types/AuthStatus";
 
 export const store = configureStore({
@@ -15,6 +15,13 @@ export const store = configureStore({
     },
   }),
 });
+
+store.dispatch(fetchProductCategories());
+store.dispatch(fetchProductBrands());
+store.dispatch(fetchRecipeCategories());
+
+store.dispatch(fetchProducts());
+store.dispatch(fetchRecipes());
 
 if (Token.getId()) {
   store.dispatch(setAuthStatus(AuthStatus.Unknown));

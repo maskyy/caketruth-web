@@ -3,19 +3,24 @@ import { Header } from "../../header/Header";
 import { PageLayout } from "../../layouts/PageLayout";
 import "react-tabs/style/react-tabs.css";
 import { Link, useLocation } from "react-router-dom";
-import { products, recipes } from "../../../testData";
+import { useAppSelector } from "../../../hooks";
 
 export const Products = () => {
   const location = useLocation();
+  const products = useAppSelector((state) => state.products);
+  const recipes = useAppSelector((state) => state.recipes);
+  const product_brands = useAppSelector((state) => state.productBrands);
+  const product_categories = useAppSelector((state) => state.productCategories);
+  const recipe_categories = useAppSelector((state) => state.recipeCategories);
 
-  const renderedProducts = products.map((p, idx) => {
-    const formattedName = `${p.product_brand} ${p.name}`;
+  const renderedProducts = products.map((p) => {
+    const formattedName = `${product_brands.find(b => b.id === p.id)?.title ?? ""} ${p.name}`;
     return (
       <Link key={p.id} to={`/products/${p.id}`}>
         <li className="border-green-200 border-b-2">
           {formattedName}
           <br />
-          {p.calories} ккал (100 г)
+          {p.calories} ккал
         </li>
       </Link>
     );
