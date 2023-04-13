@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
-import { daySummary, mealList } from "../../../testData";
+import { daySummary } from "../../../testData";
 import { DiaryHeader } from "../../diary_components/DiaryHeader";
 import { MealBlockList } from "../../diary_components/Meals";
 import { TopSummary } from "../../diary_components/TopSummary";
@@ -26,7 +26,7 @@ export const Diary = () => {
   return (
     <PageLayout title="Дневник" header={<DiaryHeader />} footer>
       <TopSummary summary={daySummary} />
-      <MealBlockList mealList={mealList} />
+      <MealBlockList mealList={meals} />
     </PageLayout>
   );
 }

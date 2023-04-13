@@ -1,19 +1,14 @@
-import { FC, ReactNode, useEffect } from "react";
+import { ReactNode, useEffect } from "react";
 import { Footer } from "../footer/Footer";
 
-interface IPageLayoutProps {
+interface PageLayoutProps {
   title: string;
   header?: ReactNode;
   children: ReactNode;
   footer: boolean;
-};
+}
 
-export const PageLayout: FC<IPageLayoutProps> = ({
-  title,
-  header,
-  children,
-  footer = true
-}) => {
+export const PageLayout = ({ title, header, children, footer = true }: PageLayoutProps) => {
   useEffect(() => {
     document.title = title;
   }, [title]);

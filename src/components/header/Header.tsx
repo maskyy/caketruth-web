@@ -1,13 +1,13 @@
-import { FC, ReactNode } from "react";
+import { ReactNode } from "react";
 import Icon from "../../assets/img/ct-icon.svg";
 import { Link } from "react-router-dom";
 
-interface IHeaderProps {
+interface HeaderProps {
   children?: ReactNode,
   icon?: boolean,
 };
 
-export const Header: FC<IHeaderProps> = ({ children, icon = true }) => {
+export const Header = ({ children, icon = true }: HeaderProps) => {
   return (
     <header className="bg-gray-100 pb-2">
       <div className="flex items-center gap-2 mx-2">

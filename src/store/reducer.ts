@@ -6,6 +6,9 @@ import { Token } from "../util/token";
 import { getAuthStatus } from "../util/util";
 import { ServerErrors } from "../types/api";
 import { Meal } from "../types/Meal";
+import { Product } from "../types/Product";
+import { Recipe } from "../types/Recipe";
+import { Category } from "../types/Category";
 
 type State = {
   authStatus: AuthStatus;
@@ -14,6 +17,11 @@ type State = {
   registered: boolean;
   meals: Meal[];
   mealsFetched: boolean;
+  products: Product[];
+  recipes: Recipe[];
+  product_categories: Category[];
+  product_brands: Category[];
+  recipe_categories: Category[];
 };
 
 const initialState: State = {
@@ -23,6 +31,11 @@ const initialState: State = {
   registered: false,
   meals: [],
   mealsFetched: false,
+  products: [],
+  recipes: [],
+  product_categories: [],
+  product_brands: [],
+  recipe_categories: [],
 };
 
 export const reducer = createReducer(initialState, (builder) => {

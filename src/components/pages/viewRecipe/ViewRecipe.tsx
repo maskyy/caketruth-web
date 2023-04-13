@@ -52,10 +52,10 @@ export const ViewRecipe = () => {
   });
 
   const renderedIngedients = recipe.ingredients.map((p, idx) => {
-    const title = `${p.product_brand} ${p.name}`;
+    const title = `${p.product.product_brand} ${p.product.name}`;
     return (
-      <tr key={p.name} className="border-y border-gray-300">
-        <td><Link to={`/products/${p.id}`}>{title}</Link></td>
+      <tr key={p.product.name} className="border-y border-gray-300">
+        <td><Link to={`/products/${p.product.id}`}>{title}</Link></td>
         <td>{p.mass}</td>
       </tr>
     );

@@ -1,5 +1,6 @@
-import { Product } from "./Product";
+import { BasicProduct, Product } from "./Product";
 
-export interface Ingredient extends Product {
-  mass: number
-};
+export interface Ingredient {
+  product: BasicProduct;
+  mass: number;
+}

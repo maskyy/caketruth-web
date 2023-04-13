@@ -45,8 +45,7 @@ export const products: Product[] = [
     carbs: 1.5,
     is_public: true,
     is_verified: true,
-    type: "product",
-    author_name: "me",
+    user: 1,
     net_grams: 400,
     product_category: "Молочная продукция",
     product_brand: "ВкусВилл",
@@ -60,8 +59,7 @@ export const products: Product[] = [
     carbs: 21.8,
     is_public: true,
     is_verified: true,
-    type: "product",
-    author_name: "me",
+    user: 1,
     product_category: "Фрукты",
     product_brand: "Окей",
   },
@@ -74,8 +72,7 @@ export const products: Product[] = [
     carbs: 1.83,
     is_public: true,
     is_verified: true,
-    type: "product",
-    author_name: "me",
+    user: 1,
     product_category: "Фрукты",
     product_brand: "Перекресток",
   },
@@ -89,8 +86,7 @@ export const products: Product[] = [
     ethanol: 100,
     is_public: true,
     is_verified: true,
-    type: "product",
-    author_name: "me",
+    user: 1,
     product_category: "Алкоголь",
     product_brand: "Светофор",
   },
@@ -108,8 +104,7 @@ export const recipes: Recipe[] = [
     carbs: 8,
     is_public: false,
     is_verified: false,
-    type: "recipe",
-    author_name: "me",
+    user: 1,
     directions: `
 1. Пюрировать бананы с молоком
 2. Смешать творог и пюре
@@ -119,8 +114,8 @@ export const recipes: Recipe[] = [
     mass: 1200,
     recipe_category: "Завтрак",
     ingredients: [
-      { ...products[0], mass: 500 },
-      { ...products[1], mass: 250 },
+      { product: products[0], mass: 500 },
+      { product: products[1], mass: 250 },
     ],
   },
   {
@@ -132,14 +127,13 @@ export const recipes: Recipe[] = [
     carbs: 56,
     is_public: true,
     is_verified: false,
-    type: "recipe",
-    author_name: "me",
+    user: 1,
     directions: `test`,
     mass: 600,
     recipe_category: "Обед",
     ingredients: [
-      { ...products[1], mass: 123 },
-      { ...products[2], mass: 345 },
+      { product: products[1], mass: 123 },
+      { product: products[2], mass: 345 },
     ],
   },
 ];
@@ -204,7 +198,6 @@ export const daySummary: Summary = {
   fats: 123.45,
   carbs: 123.45,
   calories: 1234,
-  rdi: 2200,
   date: "2022-03-10"
 };
 
@@ -214,7 +207,6 @@ export const reportsData: Summary[] = [
     fats: 30,
     carbs: 40,
     calories: 1400,
-    rdi: 1500,
     date: "2022-03-06",
   },
   {
@@ -222,7 +214,6 @@ export const reportsData: Summary[] = [
     fats: 0,
     carbs: 20,
     calories: 900,
-    rdi: 2200,
     date: "2022-03-07",
   },
   {
@@ -230,7 +221,6 @@ export const reportsData: Summary[] = [
     fats: 90,
     carbs: 70,
     calories: 1945,
-    rdi: 2100,
     date: "2022-03-08",
   },
   {
@@ -238,7 +228,6 @@ export const reportsData: Summary[] = [
     fats: 80,
     carbs: 80,
     calories: 1900,
-    rdi: 2200,
     date: "2022-03-09",
   },
   {
@@ -246,7 +235,6 @@ export const reportsData: Summary[] = [
     fats: 70,
     carbs: 400,
     calories: 2800,
-    rdi: 2200,
     date: "2022-03-10",
   },
   {
@@ -254,7 +242,6 @@ export const reportsData: Summary[] = [
     fats: 90,
     carbs: 90,
     calories: 2100,
-    rdi: 2300,
     date: "2022-03-11",
   },
   {
@@ -262,7 +249,6 @@ export const reportsData: Summary[] = [
     fats: 80,
     carbs: 80,
     calories: 2250,
-    rdi: 2200,
     date: "2022-03-12",
   },
 ];

@@ -1,11 +1,10 @@
-import { FC } from "react";
 import { createPortal } from "react-dom";
 import { CgInsights, CgList, CgLogIn, CgMonday, CgProfile, CgUserAdd } from "react-icons/cg";
 import { TabLink } from "./TabLink";
 import { useAppSelector } from "../../hooks";
 import { AuthStatus } from "../../types/AuthStatus";
 
-export const Footer: FC = () => {
+export const Footer = () => {
   const authStatus = useAppSelector((state) => state.authStatus);
   return createPortal(
     <footer className="bg-gray-100 py-2">

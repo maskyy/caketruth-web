@@ -1,9 +1,8 @@
-import { FC } from "react";
 import { Route, Routes } from "react-router-dom";
 import { authRoutes, routes } from "../router";
 import { AuthRoute } from "./auth_route/AuthRoute";
 
-export const AppRouter: FC = () => {
+export const AppRouter = () => {
   return (
     <Routes>
       {routes.map(route =>

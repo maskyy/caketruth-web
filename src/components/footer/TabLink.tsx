@@ -1,13 +1,13 @@
-import { FC, ReactNode } from "react";
+import { ReactNode } from "react";
 import { Link } from "react-router-dom";
 
-interface ITabLinkProps {
+interface TabLinkProps {
   to: string;
   children?: ReactNode;
   title: string;
 };
 
-export const TabLink: FC<ITabLinkProps> = ({ to, children, title }) => {
+export const TabLink = ({ to, children, title }: TabLinkProps) => {
   return (
     <Link to={to} className="flex flex-col items-center">
       {children}

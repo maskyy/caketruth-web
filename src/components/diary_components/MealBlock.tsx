@@ -1,15 +1,16 @@
 import { CgMathPlus } from "react-icons/cg";
 import { Link } from "react-router-dom";
 import { mealItems } from "../../testData";
-import { DiaryRecord } from "../../types/DiaryRecord";
 import { MealItem } from "./MealItem";
 import { MealSummary } from "./MealSummary";
 
-export function MealBlock({ name }: {
-  name: string
-}) {
+interface MealBlockProps {
+  name: string;
+}
+
+export const MealBlock = ({ name }: MealBlockProps) => {
   const renderedItems = mealItems.map((item, idx) => {
-    return <MealItem key={item.id} item={item} rdi={2200} />
+    return <MealItem key={item.id} item={item} />
   });
 
   return (
@@ -21,7 +22,6 @@ export function MealBlock({ name }: {
         fats={12.34}
         carbs={34.56}
         calories={234}
-        rdi={2200}
         date=""
       />
       <ul>

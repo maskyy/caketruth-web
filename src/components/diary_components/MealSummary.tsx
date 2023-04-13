@@ -1,8 +1,8 @@
 import { Summary } from "../../types/Summary";
 
-export function MealSummary({ proteins, fats, carbs, calories, rdi }: Summary) {
-  const values = [proteins, fats, carbs, calories / rdi, calories].map((value, idx) => {
-    return value.toFixed(idx > 2 ? 0 : 2);
+export function MealSummary({ proteins, fats, carbs, calories }: Summary) {
+  const values = [proteins, fats, carbs, calories].map((value, idx) => {
+    return value.toFixed(2);
   });
   const elements = values.map((value, idx) => <li className="text-xs" key={idx}>{value}</li>);
 
