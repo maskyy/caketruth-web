@@ -3,6 +3,7 @@ import { AxiosError, AxiosInstance } from "axios";
 import { User, UserAuth, UserSignup, UserUpdate } from "../types/User";
 import { AuthResponse, ServerErrors } from "../types/api";
 import { AuthStatus } from "../types/AuthStatus";
+import { Meal } from "../types/Meal";
 
 interface Extra {
   api: AxiosInstance;
@@ -16,6 +17,8 @@ export const Action = {
   FETCH_USER: "user/fetch",
   UPDATE_USER: "user/update",
   SET_AUTH_STATUS: "authStatus/set",
+  FETCH_MEALS: "meals/fetch",
+  SET_MEALS: "meals/set",
 };
 
 export const registerUser = createAsyncThunk<User, UserSignup, { extra: Extra }>(
@@ -40,8 +43,8 @@ export const loginUser = createAsyncThunk<AuthResponse, UserAuth, { extra: Extra
   async (credentials, { extra, rejectWithValue }) => {
     const { api } = extra;
     try {
-    const response = await api.post<AuthResponse>("/users/login/", credentials);
-    return response.data;
+      const response = await api.post<AuthResponse>("/users/login/", credentials);
+      return response.data;
     } catch (err) {
       let error = err as AxiosError<ServerErrors>;
       if (!error.response) {
@@ -87,8 +90,8 @@ export const updateUser = createAsyncThunk<User, UserUpdate, { extra: Extra }>(
     const newData = { ...user };
     delete newData.id;
     Object.keys(newData).forEach((k) => {
-      if (!(newData as {[k: string]: number | string})[k]) {
-        delete (newData as {[k: string]: number | string})[k];
+      if (!(newData as { [k: string]: number | string })[k]) {
+        delete (newData as { [k: string]: number | string })[k];
       }
     });
 
@@ -102,3 +105,26 @@ export const updateUser = createAsyncThunk<User, UserUpdate, { extra: Extra }>(
 )
 
 export const setAuthStatus = createAction<AuthStatus>(Action.SET_AUTH_STATUS);
+
+export const fetchMeals = createAsyncThunk<Meal[], undefined, { extra: Extra }>(
+  Action.FETCH_MEALS,
+  async (_, { extra }) => {
+    const { api } = extra;
+    const { data } = await api.get<Meal[]>("/meals/");
+    return data;
+  }
+);
+
+export const setMeals = createAsyncThunk<Meal[], string[], { extra: Extra }>(
+  Action.SET_MEALS,
+  async (names, { extra }) => {
+    const { api } = extra;
+    const data: Meal[] = [];
+    for (const name of names) {
+      const response = await api.post<Meal>("/meals/", { name });
+      data.push(response.data);
+    }
+    console.log(data);
+    return data;
+  }
+);

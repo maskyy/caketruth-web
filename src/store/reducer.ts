@@ -1,16 +1,19 @@
 import { createReducer } from "@reduxjs/toolkit";
 import { User } from "../types/User";
 import { AuthStatus } from "../types/AuthStatus";
-import { fetchUser, loginUser, logoutUser, refreshToken, registerUser, setAuthStatus, updateUser } from "./action";
+import { fetchMeals, fetchUser, loginUser, logoutUser, refreshToken, registerUser, setAuthStatus, setMeals, updateUser } from "./action";
 import { Token } from "../util/token";
 import { getAuthStatus } from "../util/util";
 import { ServerErrors } from "../types/api";
+import { Meal } from "../types/Meal";
 
 type State = {
   authStatus: AuthStatus;
   user: User | null;
   errors: ServerErrors | null;
   registered: boolean;
+  meals: Meal[];
+  mealsFetched: boolean;
 };
 
 const initialState: State = {
@@ -18,6 +21,8 @@ const initialState: State = {
   user: null,
   errors: null,
   registered: false,
+  meals: [],
+  mealsFetched: false,
 };
 
 export const reducer = createReducer(initialState, (builder) => {
@@ -42,6 +47,7 @@ export const reducer = createReducer(initialState, (builder) => {
       Token.drop();
       state.authStatus = AuthStatus.NoAuth;
       state.user = null;
+      state.meals = [];
     })
     .addCase(fetchUser.fulfilled, (state, action) => {
       state.authStatus = getAuthStatus(action.payload);
@@ -55,5 +61,13 @@ export const reducer = createReducer(initialState, (builder) => {
     })
     .addCase(setAuthStatus, (state, action) => {
       state.authStatus = action.payload;
+    })
+    .addCase(fetchMeals.fulfilled, (state, action) => {
+      state.meals = action.payload;
+      state.mealsFetched = true;
+    })
+    .addCase(setMeals.fulfilled, (state, action) => {
+      state.meals = action.payload;
+      state.mealsFetched = true;
     });
 });

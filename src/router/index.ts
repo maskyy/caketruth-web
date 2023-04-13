@@ -11,6 +11,7 @@ import { EditRecord } from "../components/pages/editRecord/EditRecord";
 import { Login } from "../components/pages/login/Login";
 import { SignUp } from "../components/pages/signUp/SignUp";
 import { Logout } from "../components/pages/logout/Logout";
+import { Meals } from "../components/pages/meals/Meals";
 
 interface route {
   path: string;
@@ -37,4 +38,5 @@ export const authRoutes: route[] = [
   { path: "/diary/:recordId/edit", component: EditRecord },
   { path: "/reports", component: Reports },
   { path: "/profile", component: Profile },
+  { path: "/meals", component: Meals },
 ];
