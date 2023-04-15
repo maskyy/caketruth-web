@@ -7,19 +7,10 @@ import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { Spinner } from "../../spinner/Spinner";
 import { NotFound } from "../not-found/NotFound";
 import { fetchProduct } from "../../../store/action";
-
-const titles: string[][] = [
-  ["calories", "Калориийность", "ккал"],
-  ["proteins", "Белки", "г"],
-  ["fats", "Жиры", "г"],
-  ["carbs", "Углеводы", "г"],
-  ["ethanol", "Этанол", "г"],
-  ["net_grams", "Масса нетто", "г"],
-  ["drained_grams", "Масса основного продукта", "г"],
-  ["product_category", "Категория"],
-];
-
-const dependsOnMass = ["calories", "proteins", "fats", "carbs", "ethanol"];
+import { Entry } from "../../../types/Entry";
+import DatePicker from "react-date-picker";
+import { DiaryData } from "../../../types/DiaryRecord";
+import { DateData } from "../../../types/DateData";
 
 export const ViewProduct = () => {
   const dispatch = useAppDispatch();
@@ -31,7 +22,20 @@ export const ViewProduct = () => {
   const productCategories = useAppSelector((state) => state.productCategories);
 
   const [mass, setMass] = useState(100);
-  const [meal, setMeal] = useState(0);
+  const [whole, setWhole] = useState(false);
+  const [drained, setDrained] = useState(false);
+
+  const entries: Entry[] = [
+    { key: "calories", title: "Калорийность", suffix: "ккал", mass: true },
+    { key: "proteins", title: "Белки", suffix: "г", mass: true },
+    { key: "fats", title: "Жиры", suffix: "г", mass: true },
+    { key: "carbs", title: "Углеводы", suffix: "г", mass: true },
+    { key: "ethanol", title: "Этанол", suffix: "г", mass: true },
+    { key: "net_grams", title: "Масса нетто", suffix: "г" },
+    { key: "drained_grams", title: "Масса основного продукта", suffix: "г" },
+    { key: "product_category", title: "Категория", categories: productCategories },
+  ];
+
 
   useEffect(() => {
     if (productId) {
@@ -50,27 +54,34 @@ export const ViewProduct = () => {
     return <option key={meal.id} value={meal.id}>{meal.name}</option>
   });
 
-  //const product = products.find(p => p.id === productId)!;
   const productEntries = Object.entries(product);
 
-  // FIXME...
-  const renderedData = productEntries.map(entry => {
-    let translation = titles.find(t => t[0] === entry[0]);
-    if (translation === undefined || !entry[1]) {
+  const renderedData = productEntries.map(([k, v]) => {
+    let entry = entries.find((t) => t.key === k);
+    if (entry === undefined || (!v && !(v === 0 && v.mass))) {
       return null;
     }
-    const title = translation[1];
-    let value: string | number = entry[1];
-    if (dependsOnMass.indexOf(entry[0]) !== -1) {
-      value = +value;
-      value = (value * mass / 100).toFixed(2);
+
+    let value: string | number = v;
+    if (entry.categories) {
+      value = entry.categories.find((c) => c.id === v)!.title;
     }
-    const suffix = translation[2] ?? "";
+    if (entry.mass) {
+      value = +value;
+      if (whole && product.net_grams) {
+        value = value * mass * (product.net_grams);
+      } else if (drained && product.net_grams && product.drained_grams) {
+        value = value * mass * (product.net_grams / product.drained_grams);
+      } else {
+        value = value * mass;
+      }
+      value = +(value / 100).toFixed(2);
+    }
 
     return (
-      <tr key={title} className="border-y border-gray-300">
-        <td>{title}</td>
-        <td>{value} {suffix}</td>
+      <tr key={k} className="border-y border-gray-300">
+        <td>{entry.title}</td>
+        <td>{value} {entry.suffix ?? ""}</td>
       </tr>
     );
   });
@@ -79,18 +90,38 @@ export const ViewProduct = () => {
     setMass(+ev.target.value);
   };
 
-  const handleMealChange = (ev: ChangeEvent<HTMLSelectElement>) => {
-    setMeal(+ev.target.value);
+  const handleWholeChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setWhole(e.target.checked);
+    if (e.target.checked) {
+      setMass(+(mass / product.net_grams!).toFixed(2));
+    } else {
+      setMass(+(mass * product.net_grams!).toFixed(2));
+    }
   };
 
-  const handleSubmit = (ev: FormEvent<HTMLFormElement>) => {
-    ev.preventDefault();
-    const data = {
-      food_id: productId,
-      mass: mass,
-      meal_id: meal,
-      added_date: new Date()
-    };
+  const handleDrainedChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setDrained(e.target.checked);
+    if (e.target.checked) {
+      setMass(+(mass / (product.net_grams! / product.drained_grams!)).toFixed(2));
+    } else {
+      setMass(+(mass * (product.net_grams! / product.drained_grams!)).toFixed(2));
+    }
+  };
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const formData = new FormData(form) as Iterable<[DiaryData]>;
+    const data: DiaryData & Partial<DateData> = Object.fromEntries(formData);
+    if (whole) {
+      data.mass = data.mass * product.net_grams!;
+    } else if (drained) {
+      data.mass = data.mass * (product.net_grams! / product.drained_grams!);
+    }
+    data.mass = +data.mass.toFixed(2);
+    delete data.day;
+    delete data.month;
+    delete data.year;
     console.log(data);
     navigate("/diary");
   }
@@ -101,23 +132,42 @@ export const ViewProduct = () => {
       header={
         <Header icon={false}>
           <Link to="/products"><CgArrowLeft size={24} /></Link>
-          <h1>
-            {product.product_brand} {product.name}
-          </h1>
+          <h1>{product.name}</h1>
         </Header>
       }
       footer={false}
     >
       <form className="flex flex-col items-center" onSubmit={handleSubmit}>
+        <input type="hidden" name="food" value={productId} />
         <div className="flex justify-between gap-2">
-          <label htmlFor="mass">Масса</label>
+          <label htmlFor="mass">{whole ? "Кол-во" : "Масса"}</label>
           <input className="w-24" type="number" name="mass" value={mass} onChange={handleMassChange} />
         </div>
+        {product?.net_grams && !drained && <div>
+          <label>Кол-во</label>
+          <input type="checkbox" onChange={handleWholeChange} />
+        </div>}
+        {product?.drained_grams && !whole && <div>
+          <label>Вес основного</label>
+          <input type="checkbox" onChange={handleDrainedChange} />
+        </div>}
         <div className="flex justify-between gap-2">
           <label htmlFor="meal">Приём</label>
-          <select name="meal" onChange={handleMealChange}>
+          <select name="meal">
             {renderedMeals}
           </select>
+        </div>
+        <div className="flex justify-between gap-2">
+          <label htmlFor="date">Дата</label>
+          <DatePicker
+            className="self-end"
+            format="dd.MM.y"
+            locale="ru-RU"
+            clearIcon={null}
+            value={new Date()}
+            name="added_date"
+            required
+          />
         </div>
         <button type="submit">Добавить в дневник</button>
       </form>

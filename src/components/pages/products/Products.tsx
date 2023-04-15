@@ -9,12 +9,12 @@ export const Products = () => {
   const location = useLocation();
   const products = useAppSelector((state) => state.products);
   const recipes = useAppSelector((state) => state.recipes);
-  const product_brands = useAppSelector((state) => state.productBrands);
-  const product_categories = useAppSelector((state) => state.productCategories);
-  const recipe_categories = useAppSelector((state) => state.recipeCategories);
+  const productBrands = useAppSelector((state) => state.productBrands);
+  const productCategories = useAppSelector((state) => state.productCategories);
+  const recipeCategories = useAppSelector((state) => state.recipeCategories);
 
   const renderedProducts = products.map((p) => {
-    const formattedName = `${product_brands.find(b => b.id === p.id)?.title ?? ""} ${p.name}`;
+    const formattedName = `${productBrands.find(b => b.id === p.product_brand)?.title ?? ""} ${p.name}`;
     return (
       <Link key={p.id} to={`/products/${p.id}`}>
         <li className="border-green-200 border-b-2">

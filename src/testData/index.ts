@@ -47,8 +47,8 @@ export const products: Product[] = [
     is_verified: true,
     user: 1,
     net_grams: 400,
-    product_category: "Молочная продукция",
-    product_brand: "ВкусВилл",
+    product_category: 1,
+    product_brand: 1,
   },
   {
     id: 2,
@@ -60,8 +60,8 @@ export const products: Product[] = [
     is_public: true,
     is_verified: true,
     user: 1,
-    product_category: "Фрукты",
-    product_brand: "Окей",
+    product_category: 1,
+    product_brand: 1,
   },
   {
     id: 3,
@@ -73,8 +73,8 @@ export const products: Product[] = [
     is_public: true,
     is_verified: true,
     user: 1,
-    product_category: "Фрукты",
-    product_brand: "Перекресток",
+    product_category: 1,
+    product_brand: 1,
   },
   {
     id: 4,
@@ -87,8 +87,8 @@ export const products: Product[] = [
     is_public: true,
     is_verified: true,
     user: 1,
-    product_category: "Алкоголь",
-    product_brand: "Светофор",
+    product_category: 1,
+    product_brand: 1,
   },
 ];
 
@@ -146,51 +146,6 @@ export const mealList: Meal[] = [
 ];
 
 export const mealItems: DiaryRecord[] = [
-  {
-    id: 1,
-    name: "Вкусвилл Творог 5%",
-    mass: 81,
-    calories: 95,
-    proteins: 13.36,
-    fats: 4.05,
-    carbs: 1.22,
-  },
-  {
-    id: 2,
-    name: "Магнит Айва",
-    mass: 249,
-    calories: 120,
-    proteins: 1.49,
-    fats: 1.25,
-    carbs: 23.9,
-  },
-  {
-    id: 3,
-    name: "Магнит Айва",
-    mass: 249,
-    calories: 120,
-    proteins: 1.49,
-    fats: 1.25,
-    carbs: 23.9,
-  },
-  {
-    id: 4,
-    name: "Магнит Айва",
-    mass: 249,
-    calories: 120,
-    proteins: 1.49,
-    fats: 1.25,
-    carbs: 23.9,
-  },
-  {
-    id: 5,
-    name: "Магнит Айва",
-    mass: 249,
-    calories: 120,
-    proteins: 1.49,
-    fats: 1.25,
-    carbs: 23.9,
-  },
 ];
 
 export const daySummary: Summary = {

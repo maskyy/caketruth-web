@@ -6,7 +6,12 @@ interface MealItemProps {
 }
 
 export const MealItem = ({ item }: MealItemProps) => {
-  const macros = [item.proteins, item.fats, item.carbs, item.calories];
+  const macros = [
+    item.calc_proteins,
+    item.calc_fats,
+    item.calc_carbs,
+    item.calc_calories
+  ];
   const renderedMacros = macros.map((macro, idx) => {
     return <li key={idx}>{macro}</li>
   });
