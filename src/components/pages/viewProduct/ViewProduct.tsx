@@ -6,7 +6,7 @@ import { PageLayout } from "../../layouts/PageLayout";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { Spinner } from "../../spinner/Spinner";
 import { NotFound } from "../not-found/NotFound";
-import { fetchProduct } from "../../../store/action";
+import { addDiaryRecord, fetchProduct } from "../../../store/action";
 import { Entry } from "../../../types/Entry";
 import DatePicker from "react-date-picker";
 import { DiaryData } from "../../../types/DiaryRecord";
@@ -15,7 +15,7 @@ import { DateData } from "../../../types/DateData";
 export const ViewProduct = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const productId = Number(useParams().productId);
+  const id = Number(useParams().id);
   const product = useAppSelector((state) => state.product);
   const isLoading = useAppSelector((state) => state.isLoading);
   const meals = useAppSelector((state) => state.meals);
@@ -24,6 +24,7 @@ export const ViewProduct = () => {
   const [mass, setMass] = useState(100);
   const [whole, setWhole] = useState(false);
   const [drained, setDrained] = useState(false);
+  const [date, setDate] = useState(new Date());
 
   const entries: Entry[] = [
     { key: "calories", title: "Калорийность", suffix: "ккал", mass: true },
@@ -38,10 +39,10 @@ export const ViewProduct = () => {
 
 
   useEffect(() => {
-    if (productId) {
-      dispatch(fetchProduct(productId));
+    if (id) {
+      dispatch(fetchProduct(id));
     }
-  }, [dispatch, productId]);
+  }, [dispatch, id]);
 
   if (isLoading) {
     return <Spinner />;
@@ -65,8 +66,7 @@ export const ViewProduct = () => {
     let value: string | number = v;
     if (entry.categories) {
       value = entry.categories.find((c) => c.id === v)!.title;
-    }
-    if (entry.mass) {
+    } else if (entry.mass) {
       value = +value;
       if (whole && product.net_grams) {
         value = value * mass * (product.net_grams);
@@ -118,13 +118,14 @@ export const ViewProduct = () => {
     } else if (drained) {
       data.mass = data.mass * (product.net_grams! / product.drained_grams!);
     }
-    data.mass = +data.mass.toFixed(2);
+    data.mass = +(+data.mass).toFixed(2);
     delete data.day;
     delete data.month;
     delete data.year;
-    console.log(data);
+
+    dispatch(addDiaryRecord(data));
     navigate("/diary");
-  }
+  };
 
   return (
     <PageLayout
@@ -138,7 +139,7 @@ export const ViewProduct = () => {
       footer={false}
     >
       <form className="flex flex-col items-center" onSubmit={handleSubmit}>
-        <input type="hidden" name="food" value={productId} />
+        <input type="hidden" name="food" value={id} />
         <div className="flex justify-between gap-2">
           <label htmlFor="mass">{whole ? "Кол-во" : "Масса"}</label>
           <input className="w-24" type="number" name="mass" value={mass} onChange={handleMassChange} />
@@ -164,12 +165,13 @@ export const ViewProduct = () => {
             format="dd.MM.y"
             locale="ru-RU"
             clearIcon={null}
-            value={new Date()}
+            onChange={setDate}
+            value={date}
             name="added_date"
             required
           />
         </div>
-        <button type="submit">Добавить в дневник</button>
+        {mass > 0 && mass < 10000 && <button type="submit">Добавить в дневник</button>}
       </form>
       <div className="flex flex-col items-center">
         <h2><strong>Информация о продукте</strong></h2>

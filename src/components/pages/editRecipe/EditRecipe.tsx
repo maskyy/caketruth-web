@@ -2,10 +2,10 @@ import { useParams } from "react-router-dom";
 import { PageLayout } from "../../layouts/PageLayout";
 
 export const EditRecipe = () => {
-  const { recipeId } = useParams();
+  const { id } = useParams();
   return (
     <PageLayout title="Редактирование рецепта" footer={false}>
-      {recipeId}
+      {id}
     </PageLayout>
   );
 }

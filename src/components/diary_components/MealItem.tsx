@@ -15,12 +15,13 @@ export const MealItem = ({ item }: MealItemProps) => {
   const renderedMacros = macros.map((macro, idx) => {
     return <li key={idx}>{macro}</li>
   });
+  const name = item.recipe?.name ?? item.product?.name ?? "???";
 
   return (
     <li className="border-b border-white">
       <Link to={`/diary/${item.id}/edit`}>
         <div className="flex justify-between mx-4">
-          <p>{item.name}<br />{item.mass} г</p>
+          <p>{name}<br />{item.mass} г</p>
         </div>
         <ul className="flex justify-between mx-4 text-xs">
           {renderedMacros}

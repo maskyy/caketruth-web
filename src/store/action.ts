@@ -7,6 +7,7 @@ import { Meal } from "../types/Meal";
 import { BasicProduct, Product } from "../types/Product";
 import { BasicRecipe, Recipe } from "../types/Recipe";
 import { Category } from "../types/Category";
+import { DiaryData, DiaryRecord, DiaryUpdate } from "../types/DiaryRecord";
 
 interface Extra {
   api: AxiosInstance;
@@ -29,6 +30,10 @@ export const Action = {
   FETCH_RECIPE_CATEGORIES: "recipeCategories/fetch",
   FETCH_PRODUCT: "product/fetch",
   FETCH_RECIPE: "recipe/fetch",
+  FETCH_DIARY: "diary/fetch",
+  ADD_DIARY_RECORD: "diaryRecord/add",
+  UPDATE_DIARY_RECORD: "diaryRecord/update",
+  DELETE_DIARY_RECORD: "diaryRecord/delete",
 };
 
 export const registerUser = createAsyncThunk<User, UserSignup, { extra: Extra }>(
@@ -165,7 +170,7 @@ export const fetchProductCategories = createAsyncThunk<Category[], undefined, { 
   }
 );
 
-export const fetchProductBrands = createAsyncThunk<Category[], undefined, { extra: Extra}>(
+export const fetchProductBrands = createAsyncThunk<Category[], void, { extra: Extra}>(
   Action.FETCH_PRODUCT_BRANDS,
   async (_, { extra }) => {
     const { api } = extra;
@@ -174,7 +179,7 @@ export const fetchProductBrands = createAsyncThunk<Category[], undefined, { extr
   }
 );
 
-export const fetchRecipeCategories = createAsyncThunk<Category[], undefined, { extra: Extra}>(
+export const fetchRecipeCategories = createAsyncThunk<Category[], void, { extra: Extra}>(
   Action.FETCH_RECIPE_CATEGORIES,
   async (_, { extra }) => {
     const { api } = extra;
@@ -197,6 +202,44 @@ export const fetchRecipe = createAsyncThunk<Recipe, number, { extra: Extra }>(
   async (id, { extra }) => {
     const { api } = extra;
     const { data } = await api.get<Recipe>(`/recipes/${id}`);
+    return data;
+  }
+);
+
+export const fetchDiary = createAsyncThunk<DiaryRecord[], void, { extra: Extra }>(
+  Action.FETCH_DIARY,
+  async (_, { extra }) => {
+    const { api } = extra;
+    const { data } = await api.get<DiaryRecord[]>("/diary/");
+    return data;
+  }
+);
+
+export const addDiaryRecord = createAsyncThunk<DiaryRecord, DiaryData, { extra: Extra}>(
+  Action.ADD_DIARY_RECORD,
+  async (record, { extra }) => {
+    const { api } = extra;
+    const { data } = await api.post<DiaryRecord>("/diary/", record);
+    return data;
+  }
+);
+
+export const updateDiaryRecord = createAsyncThunk<DiaryRecord, DiaryUpdate, { extra: Extra }>(
+  Action.UPDATE_DIARY_RECORD,
+  async (update, { extra }) => {
+    const { api } = extra;
+    const { id } = update;
+    delete update.id;
+    const { data } = await api.patch<DiaryRecord>(`/diary/${id}`, update);
+    return data;
+  }
+);
+
+export const deleteDiaryRecord = createAsyncThunk<void, number, { extra: Extra }>(
+  Action.DELETE_DIARY_RECORD,
+  async (id, { extra }) => {
+    const { api } = extra;
+    const { data } = await api.delete(`/diary/${id}`);
     return data;
   }
 );

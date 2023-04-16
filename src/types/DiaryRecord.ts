@@ -21,3 +21,5 @@ export type DiaryData = Pick<DiaryRecord, "mass" | "meal"> & {
   food: number;
   added_date?: string;
 };
+
+export type DiaryUpdate = Partial<DiaryData> & { id?: number };

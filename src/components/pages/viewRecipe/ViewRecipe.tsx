@@ -1,13 +1,16 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { CgArrowLeft } from "react-icons/cg";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { mealList, recipes } from "../../../testData";
 import { Header } from "../../header/Header";
 import { PageLayout } from "../../layouts/PageLayout";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
-import { fetchRecipe } from "../../../store/action";
+import { addDiaryRecord, fetchRecipe } from "../../../store/action";
 import { Spinner } from "../../spinner/Spinner";
 import { NotFound } from "../not-found/NotFound";
+import { Entry } from "../../../types/Entry";
+import DatePicker from "react-date-picker";
+import { DiaryData } from "../../../types/DiaryRecord";
+import { DateData } from "../../../types/DateData";
 
 const titles: string[][] = [
   ["calories", "Калориийность", "ккал"],
@@ -23,21 +26,32 @@ const dependsOnMass = ["calories", "proteins", "fats", "carbs", "ethanol"];
 
 export const ViewRecipe = () => {
   const dispatch = useAppDispatch();
-  const recipeId = Number(useParams().recipeId);
+  const id = Number(useParams().id);
   const recipe = useAppSelector((state) => state.recipe);
   const isLoading = useAppSelector((state) => state.isLoading);
   const meals = useAppSelector((state) => state.meals);
   const recipeCategories = useAppSelector((state) => state.recipeCategories);
+  const productBrands = useAppSelector((state) => state.productBrands);
 
   const navigate = useNavigate();
   const [mass, setMass] = useState(recipe?.mass ?? 100);
-  const [meal, setMeal] = useState(0);
+  const [date, setDate] = useState(new Date());
+
+  const entries: Entry[] = [
+    { key: "calories", title: "Калорийность", suffix: "ккал", mass: true },
+    { key: "proteins", title: "Белки", suffix: "г", mass: true },
+    { key: "fats", title: "Жиры", suffix: "г", mass: true },
+    { key: "carbs", title: "Углеводы", suffix: "г", mass: true },
+    { key: "ethanol", title: "Этанол", suffix: "г", mass: true },
+    { key: "mass", title: "Масса", suffix: "г" },
+    { key: "recipe_category", title: "Категория", categories: recipeCategories },
+  ];
 
   useEffect(() => {
-    if (recipeId) {
-      dispatch(fetchRecipe(recipeId));
+    if (id) {
+      dispatch(fetchRecipe(id));
     }
-  }, [dispatch, recipeId]);
+  }, [dispatch, id]);
 
   if (isLoading) {
     return <Spinner />;
@@ -46,38 +60,39 @@ export const ViewRecipe = () => {
     return <NotFound />;
   }
 
-  const renderedMeals = mealList.map(meal => {
+  const renderedMeals = meals.map(meal => {
     return <option key={meal.id} value={meal.id}>{meal.name}</option>
   });
 
   const recipeEntries = Object.entries(recipe ?? {});
-  const renderedData = recipeEntries.map(entry => {
-    let translation = titles.find(t => t[0] === entry[0]);
-    if (translation === undefined) {
+  const renderedData = recipeEntries.map(([k, v]) => {
+    let entry = entries.find(t => t.key === k);
+    if (entry === undefined) {
       return null;
     }
-    const title = translation[1];
-    let value: string | number = entry[1];
-    if (dependsOnMass.indexOf(entry[0]) !== -1) {
-      value = +value;
-      value = (value * mass / 100).toFixed(2);
+
+    let value: string | number = v;
+    if (entry.categories) {
+      value = entry.categories.find((c) => c.id === v)!.title;
+    } else if (entry.mass) {
+      value = (+value * mass / 100).toFixed(2);
     }
-    const suffix = translation[2] ?? "";
 
     return (
-      <tr key={title} className="border-y border-gray-300">
-        <td>{title}</td>
-        <td>{value} {suffix}</td>
+      <tr key={k} className="border-y border-gray-300">
+        <td>{entry.title}</td>
+        <td>{value} {entry.suffix ?? ""}</td>
       </tr>
     );
   });
 
   const renderedIngedients = recipe?.products.map((p, idx) => {
-    const title = `${p.product.product_brand} ${p.product.name}`;
+    const brand = productBrands.find((b) => b.id === p.product.product_brand)!.title;
+    const title = `${brand} ${p.product.name}`;
     return (
       <tr key={p.product.name} className="border-y border-gray-300">
         <td><Link to={`/products/${p.product.id}`}>{title}</Link></td>
-        <td>{p.mass}</td>
+        <td>{p.mass} г</td>
       </tr>
     );
   });
@@ -90,21 +105,20 @@ export const ViewRecipe = () => {
     setMass(+ev.target.value);
   };
 
-  const handleMealChange = (ev: ChangeEvent<HTMLSelectElement>) => {
-    setMeal(+ev.target.value);
-  };
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const formData = new FormData(form) as Iterable<[DiaryData]>;
+    const data: DiaryData & Partial<DateData> = Object.fromEntries(formData);
 
-  const handleSubmit = (ev: FormEvent<HTMLFormElement>) => {
-    ev.preventDefault();
-    const data = {
-      food_id: recipeId,
-      mass: mass,
-      meal_id: meal,
-      added_date: new Date()
-    };
-    console.log(data);
+    data.mass = +(+data.mass).toFixed(2);
+    delete data.day;
+    delete data.month;
+    delete data.year;
+
+    dispatch(addDiaryRecord(data));
     navigate("/diary");
-  }
+  };
 
   return (
     <PageLayout
@@ -118,25 +132,41 @@ export const ViewRecipe = () => {
       footer={false}
     >
       <form className="flex flex-col items-center" onSubmit={handleSubmit}>
+        <input type="hidden" name="food" value={id} />
         <div className="flex justify-between gap-2">
           <label htmlFor="mass">Масса</label>
           <input className="w-24" type="number" name="mass" value={mass} onChange={handleMassChange} />
         </div>
         <div className="flex justify-between gap-2">
           <label htmlFor="meal">Приём</label>
-          <select name="meal" onChange={handleMealChange}>
+          <select name="meal">
             {renderedMeals}
           </select>
         </div>
-        <button type="submit">Добавить в дневник</button>
+        <div className="flex justify-between gap-2">
+          <label htmlFor="date">Дата</label>
+          <DatePicker
+            className="self-end"
+            format="dd.MM.y"
+            locale="ru-RU"
+            clearIcon={null}
+            onChange={setDate}
+            value={date}
+            name="added_date"
+            required
+          />
+        </div>
+        {mass > 0 && mass < 10000 && <button type="submit">Добавить в дневник</button>}
       </form>
-      <div className="flex flex-col items-center">
-        <h2><strong>Информация о продукте</strong></h2>
-        <table className="mx-2 text-center">
-          <tbody>
-            {renderedData}
-          </tbody>
-        </table>
+      <div className="flex flex-col items-center gap-2">
+        <section>
+          <h2 className="text-center"><strong>Информация о рецепте</strong></h2>
+          <table className="mx-2 text-center">
+            <tbody>
+              {renderedData}
+            </tbody>
+          </table>
+        </section>
         <section>
           <h2 className="text-center">Ингредиенты</h2>
           <table className="text-center">

@@ -1,7 +1,7 @@
 import { createReducer } from "@reduxjs/toolkit";
 import { User } from "../types/User";
 import { AuthStatus } from "../types/AuthStatus";
-import { fetchMeals, fetchProduct, fetchProductBrands, fetchProductCategories, fetchProducts, fetchRecipe, fetchRecipeCategories, fetchRecipes, fetchUser, loginUser, logoutUser, refreshToken, registerUser, setAuthStatus, setMeals, updateUser } from "./action";
+import { addDiaryRecord, deleteDiaryRecord, fetchDiary, fetchMeals, fetchProduct, fetchProductBrands, fetchProductCategories, fetchProducts, fetchRecipe, fetchRecipeCategories, fetchRecipes, fetchUser, loginUser, logoutUser, refreshToken, registerUser, setAuthStatus, setMeals, updateDiaryRecord, updateUser } from "./action";
 import { Token } from "../util/token";
 import { getAuthStatus } from "../util/util";
 import { ServerErrors } from "../types/api";
@@ -9,6 +9,7 @@ import { Meal } from "../types/Meal";
 import { BasicProduct, Product } from "../types/Product";
 import { BasicRecipe, Recipe } from "../types/Recipe";
 import { Category } from "../types/Category";
+import { DiaryRecord } from "../types/DiaryRecord";
 
 type State = {
   authStatus: AuthStatus;
@@ -25,6 +26,7 @@ type State = {
   isLoading: boolean;
   product: Product | null;
   recipe: Recipe | null;
+  diary: DiaryRecord[];
 }
 
 const initialState: State = {
@@ -42,6 +44,7 @@ const initialState: State = {
   isLoading: false,
   product: null,
   recipe: null,
+  diary: [],
 };
 
 export const reducer = createReducer(initialState, (builder) => {
@@ -124,5 +127,16 @@ export const reducer = createReducer(initialState, (builder) => {
     .addCase(fetchRecipe.pending, (state, action) => {
       state.isLoading = true;
     })
+    .addCase(fetchDiary.fulfilled, (state, action) => {
+      state.diary = action.payload;
+    })
+    .addCase(addDiaryRecord.fulfilled, (state, action) => {
+      state.diary = [ ...state.diary, action.payload];
+    })
+    .addCase(updateDiaryRecord.fulfilled, (state, action) => {
 
+    })
+    .addCase(deleteDiaryRecord.fulfilled, (state, action) => {
+
+    });
 });

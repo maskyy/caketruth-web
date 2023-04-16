@@ -1,15 +1,16 @@
 import { CgMathPlus } from "react-icons/cg";
 import { Link } from "react-router-dom";
-import { mealItems } from "../../testData";
 import { MealItem } from "./MealItem";
 import { MealSummary } from "./MealSummary";
+import { useAppSelector } from "../../hooks";
 
 interface MealBlockProps {
   name: string;
 }
 
 export const MealBlock = ({ name }: MealBlockProps) => {
-  const renderedItems = mealItems.map((item, idx) => {
+  const diary = useAppSelector((state) => state.diary);
+  const renderedItems = diary.map((item, idx) => {
     return <MealItem key={item.id} item={item} />
   });
 
