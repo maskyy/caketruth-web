@@ -20,6 +20,7 @@ export const ViewProduct = () => {
   const isLoading = useAppSelector((state) => state.isLoading);
   const meals = useAppSelector((state) => state.meals);
   const productCategories = useAppSelector((state) => state.productCategories);
+  const user = useAppSelector((state) => state.user);
 
   const [mass, setMass] = useState(100);
   const [whole, setWhole] = useState(false);
@@ -36,7 +37,6 @@ export const ViewProduct = () => {
     { key: "drained_grams", title: "Масса основного продукта", suffix: "г" },
     { key: "product_category", title: "Категория", categories: productCategories },
   ];
-
 
   useEffect(() => {
     if (id) {
@@ -181,6 +181,9 @@ export const ViewProduct = () => {
           </tbody>
         </table>
       </div>
+      {((user?.id === product.user && !product.is_verified) || user?.role.name !== "user") && <div className="flex flex-col items-center">
+        <Link to="edit">Редактировать</Link>
+      </div>}
     </PageLayout>
   );
 }

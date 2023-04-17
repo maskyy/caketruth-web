@@ -12,18 +12,6 @@ import DatePicker from "react-date-picker";
 import { DiaryData } from "../../../types/DiaryRecord";
 import { DateData } from "../../../types/DateData";
 
-const titles: string[][] = [
-  ["calories", "Калориийность", "ккал"],
-  ["proteins", "Белки", "г"],
-  ["fats", "Жиры", "г"],
-  ["carbs", "Углеводы", "г"],
-  ["ethanol", "Этанол", "г"],
-  ["mass", "Масса готового блюда", "г"],
-  ["recipe_category", "Категория"],
-];
-
-const dependsOnMass = ["calories", "proteins", "fats", "carbs", "ethanol"];
-
 export const ViewRecipe = () => {
   const dispatch = useAppDispatch();
   const id = Number(useParams().id);
@@ -177,7 +165,7 @@ export const ViewRecipe = () => {
         </section>
         <section>
           <h2 className="text-center">Приготовление</h2>
-          <p>{renderedDirections}</p>
+          {renderedDirections}
         </section>
       </div>
     </PageLayout>

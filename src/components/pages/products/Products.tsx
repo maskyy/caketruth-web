@@ -12,6 +12,7 @@ export const Products = () => {
   const productBrands = useAppSelector((state) => state.productBrands);
   const productCategories = useAppSelector((state) => state.productCategories);
   const recipeCategories = useAppSelector((state) => state.recipeCategories);
+  const user = useAppSelector((state) => state.user);
 
   const renderedProducts = products.map((p) => {
     const formattedName = `${productBrands.find(b => b.id === p.product_brand)?.title ?? ""} ${p.name}`;
@@ -47,15 +48,17 @@ export const Products = () => {
           <Tab>Продукты</Tab>
           <Tab>Рецепты</Tab>
         </TabList>
-        <TabPanel>
-          <ul className="mx-2">
+        <TabPanel className="mx-2">
+          <ul>
             {renderedProducts}
           </ul>
+          {user && !user.blocked_until && <Link to="/products/new">Добавить</Link>}
         </TabPanel>
-        <TabPanel>
-          <ul className="mx-2">
+        <TabPanel className="mx-2">
+          <ul>
             {renderedRecipes}
           </ul>
+          {user && !user.blocked_until && <Link to="/recipes/new">Добавить</Link>}
         </TabPanel>
       </Tabs>
     </PageLayout>

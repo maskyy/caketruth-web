@@ -1,7 +1,7 @@
 import { createReducer } from "@reduxjs/toolkit";
 import { User } from "../types/User";
 import { AuthStatus } from "../types/AuthStatus";
-import { addDiaryRecord, deleteDiaryRecord, fetchDiary, fetchMeals, fetchProduct, fetchProductBrands, fetchProductCategories, fetchProducts, fetchRecipe, fetchRecipeCategories, fetchRecipes, fetchUser, loginUser, logoutUser, refreshToken, registerUser, setAuthStatus, setMeals, updateDiaryRecord, updateUser } from "./action";
+import { addDiaryRecord, addProduct, deleteDiaryRecord, fetchDiary, fetchMeals, fetchProduct, fetchProductBrands, fetchProductCategories, fetchProducts, fetchRecipe, fetchRecipeCategories, fetchRecipes, fetchUser, loginUser, logoutUser, refreshToken, registerUser, setAuthStatus, setMeals, updateDiaryRecord, updateProduct, updateUser } from "./action";
 import { Token } from "../util/token";
 import { getAuthStatus } from "../util/util";
 import { ServerErrors } from "../types/api";
@@ -15,7 +15,7 @@ type State = {
   authStatus: AuthStatus;
   user: User | null;
   errors: ServerErrors | null;
-  registered: boolean;
+  succeeded: boolean;
   meals: Meal[];
   mealsFetched: boolean;
   products: BasicProduct[];
@@ -33,7 +33,7 @@ const initialState: State = {
   authStatus: AuthStatus.NoAuth,
   user: null,
   errors: null,
-  registered: false,
+  succeeded: false,
   meals: [],
   mealsFetched: false,
   products: [],
@@ -50,7 +50,7 @@ const initialState: State = {
 export const reducer = createReducer(initialState, (builder) => {
   builder
     .addCase(registerUser.fulfilled, (state, action) => {
-      state.registered = true;
+      state.succeeded = true;
     })
     .addCase(registerUser.rejected, (state, action) => {
       state.errors = action.payload as ServerErrors;
@@ -138,5 +138,24 @@ export const reducer = createReducer(initialState, (builder) => {
     })
     .addCase(deleteDiaryRecord.fulfilled, (state, action) => {
 
+    })
+    .addCase(addProduct.fulfilled, (state, action) => {
+      state.products = [...state.products, action.payload];
+      state.succeeded = true;
+    })
+    .addCase(addProduct.rejected, (state, action) => {
+      state.errors = action.payload as ServerErrors;
+    })
+    .addCase(updateProduct.fulfilled, (state, action) => {
+      state.products = state.products.map((p) => {
+        if (p.id !== action.payload.id) {
+          return p;
+        }
+        return action.payload;
+      });
+      state.succeeded = true;
+    })
+    .addCase(updateProduct.rejected, (state, action) => {
+      state.errors = action.payload as ServerErrors;
     });
 });

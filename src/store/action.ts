@@ -4,7 +4,7 @@ import { User, UserAuth, UserSignup, UserUpdate } from "../types/User";
 import { AuthResponse, ServerErrors } from "../types/api";
 import { AuthStatus } from "../types/AuthStatus";
 import { Meal } from "../types/Meal";
-import { BasicProduct, Product } from "../types/Product";
+import { BasicProduct, Product, ProductUpdate } from "../types/Product";
 import { BasicRecipe, Recipe } from "../types/Recipe";
 import { Category } from "../types/Category";
 import { DiaryData, DiaryRecord, DiaryUpdate } from "../types/DiaryRecord";
@@ -34,6 +34,8 @@ export const Action = {
   ADD_DIARY_RECORD: "diaryRecord/add",
   UPDATE_DIARY_RECORD: "diaryRecord/update",
   DELETE_DIARY_RECORD: "diaryRecord/delete",
+  ADD_PRODUCT: "product/add",
+  UPDATE_PRODUCT: "product/update",
 };
 
 export const registerUser = createAsyncThunk<User, UserSignup, { extra: Extra }>(
@@ -61,7 +63,7 @@ export const loginUser = createAsyncThunk<AuthResponse, UserAuth, { extra: Extra
       const response = await api.post<AuthResponse>("/users/login/", credentials);
       return response.data;
     } catch (err) {
-      let error = err as AxiosError<ServerErrors>;
+      const error = err as AxiosError<ServerErrors>;
       if (!error.response) {
         throw err;
       }
@@ -143,7 +145,7 @@ export const setMeals = createAsyncThunk<Meal[], string[], { extra: Extra }>(
   }
 );
 
-export const fetchProducts = createAsyncThunk<BasicProduct[], undefined, { extra: Extra}>(
+export const fetchProducts = createAsyncThunk<BasicProduct[], undefined, { extra: Extra }>(
   Action.FETCH_PRODUCTS,
   async (_, { extra }) => {
     const { api } = extra;
@@ -152,7 +154,7 @@ export const fetchProducts = createAsyncThunk<BasicProduct[], undefined, { extra
   }
 );
 
-export const fetchRecipes = createAsyncThunk<BasicRecipe[], undefined, { extra: Extra}>(
+export const fetchRecipes = createAsyncThunk<BasicRecipe[], undefined, { extra: Extra }>(
   Action.FETCH_RECIPES,
   async (_, { extra }) => {
     const { api } = extra;
@@ -161,7 +163,7 @@ export const fetchRecipes = createAsyncThunk<BasicRecipe[], undefined, { extra: 
   }
 );
 
-export const fetchProductCategories = createAsyncThunk<Category[], undefined, { extra: Extra}>(
+export const fetchProductCategories = createAsyncThunk<Category[], undefined, { extra: Extra }>(
   Action.FETCH_PRODUCT_CATEGORIES,
   async (_, { extra }) => {
     const { api } = extra;
@@ -170,7 +172,7 @@ export const fetchProductCategories = createAsyncThunk<Category[], undefined, { 
   }
 );
 
-export const fetchProductBrands = createAsyncThunk<Category[], void, { extra: Extra}>(
+export const fetchProductBrands = createAsyncThunk<Category[], void, { extra: Extra }>(
   Action.FETCH_PRODUCT_BRANDS,
   async (_, { extra }) => {
     const { api } = extra;
@@ -179,7 +181,7 @@ export const fetchProductBrands = createAsyncThunk<Category[], void, { extra: Ex
   }
 );
 
-export const fetchRecipeCategories = createAsyncThunk<Category[], void, { extra: Extra}>(
+export const fetchRecipeCategories = createAsyncThunk<Category[], void, { extra: Extra }>(
   Action.FETCH_RECIPE_CATEGORIES,
   async (_, { extra }) => {
     const { api } = extra;
@@ -215,7 +217,7 @@ export const fetchDiary = createAsyncThunk<DiaryRecord[], void, { extra: Extra }
   }
 );
 
-export const addDiaryRecord = createAsyncThunk<DiaryRecord, DiaryData, { extra: Extra}>(
+export const addDiaryRecord = createAsyncThunk<DiaryRecord, DiaryData, { extra: Extra }>(
   Action.ADD_DIARY_RECORD,
   async (record, { extra }) => {
     const { api } = extra;
@@ -241,5 +243,41 @@ export const deleteDiaryRecord = createAsyncThunk<void, number, { extra: Extra }
     const { api } = extra;
     const { data } = await api.delete(`/diary/${id}`);
     return data;
+  }
+);
+
+export const addProduct = createAsyncThunk<Product, ProductUpdate, { extra: Extra }>(
+  Action.ADD_PRODUCT,
+  async (update, { extra, rejectWithValue }) => {
+    const { api } = extra;
+    try {
+      const { data } = await api.post<Product>("/products/", update);
+      return data;
+    } catch (err) {
+      const error = err as AxiosError<ServerErrors>;
+      if (!error.response) {
+        throw error;
+      }
+      return rejectWithValue(error.response?.data);
+    }
+  }
+);
+
+export const updateProduct = createAsyncThunk<Product, ProductUpdate, { extra: Extra }>(
+  Action.UPDATE_PRODUCT,
+  async (update, { extra, rejectWithValue }) => {
+    const { api } = extra;
+    const { id } = update;
+    delete update.id;
+    try {
+      const { data } = await api.patch<Product>(`/products/${id}/`, update);
+      return data;
+    } catch (err) {
+      const error = err as AxiosError<ServerErrors>;
+      if (!error.response) {
+        throw error;
+      }
+      return rejectWithValue(error.response?.data);
+    }
   }
 );

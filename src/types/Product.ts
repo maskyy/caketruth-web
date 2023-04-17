@@ -8,3 +8,5 @@ export interface Product extends Food {
 }
 
 export type BasicProduct = Pick<Product, "id" | "name" | "calories" | "product_category" | "product_brand">;
+
+export type ProductUpdate = Partial<Product>;
