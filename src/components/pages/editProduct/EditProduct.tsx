@@ -2,7 +2,7 @@ import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { PageLayout } from "../../layouts/PageLayout";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { FormEvent, useEffect } from "react";
-import { addProduct, fetchProduct, updateProduct } from "../../../store/action";
+import { addProduct, fetchProduct, resetSucceeded, updateProduct } from "../../../store/action";
 import { Spinner } from "../../spinner/Spinner";
 import { NotFound } from "../not-found/NotFound";
 import { Header } from "../../header/Header";
@@ -32,8 +32,9 @@ export const EditProduct = () => {
   useEffect(() => {
     if (succeeded) {
       navigate("/products");
+      dispatch(resetSucceeded());
     }
-  }, [succeeded, navigate]);
+  }, [succeeded, navigate, dispatch]);
 
   if (isLoading) {
     return <Spinner />;
@@ -61,7 +62,6 @@ export const EditProduct = () => {
       delete data.id;
     }
 
-    console.log(data);
     if (isNew) {
       dispatch(addProduct(data));
     } else {

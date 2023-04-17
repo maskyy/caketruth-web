@@ -19,7 +19,6 @@ export const Login = () => {
     const form = e.currentTarget;
     const formData = new FormData(form) as Iterable<[UserAuth]>;
     const data: UserAuth = Object.fromEntries(formData);
-    console.log(data);
     dispatch(loginUser(data));
   };
 

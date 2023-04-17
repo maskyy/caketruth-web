@@ -59,11 +59,14 @@ export const ViewRecipe = () => {
       return null;
     }
 
-    let value: string | number = v;
+    let value: string | number | undefined = v;
     if (entry.categories) {
-      value = entry.categories.find((c) => c.id === v)!.title;
+      value = entry.categories.find((c) => c.id === v)?.title;
+      if (value === undefined) {
+        return null;
+      }
     } else if (entry.mass) {
-      value = (+value * mass / 100).toFixed(2);
+      value = (Number(value) * mass / 100).toFixed(2);
     }
 
     return (
@@ -75,7 +78,7 @@ export const ViewRecipe = () => {
   });
 
   const renderedIngedients = recipe?.products.map((p, idx) => {
-    const brand = productBrands.find((b) => b.id === p.product.product_brand)!.title;
+    const brand = productBrands.find((b) => b.id === p.product.product_brand)?.title ?? "";
     const title = `${brand} ${p.product.name}`;
     return (
       <tr key={p.product.name} className="border-y border-gray-300">

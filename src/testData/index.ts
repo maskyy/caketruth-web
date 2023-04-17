@@ -112,7 +112,7 @@ export const recipes: Recipe[] = [
 4. Смазать форму маслом, выложить в неё творог
 5. Выпекать в форме при 190 C 30 мин`,
     mass: 1200,
-    recipe_category: "Завтрак",
+    recipe_category: 0,
     products: [
       { product: products[0], mass: 500 },
       { product: products[1], mass: 250 },
@@ -130,7 +130,7 @@ export const recipes: Recipe[] = [
     user: 1,
     directions: `test`,
     mass: 600,
-    recipe_category: "Обед",
+    recipe_category: 0,
     products: [
       { product: products[1], mass: 123 },
       { product: products[2], mass: 345 },

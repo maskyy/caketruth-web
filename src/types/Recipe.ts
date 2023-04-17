@@ -4,7 +4,7 @@ import { Ingredient } from "./Ingredient";
 export interface Recipe extends Food {
   directions: string;
   mass: number;
-  recipe_category: string;
+  recipe_category: number;
   products: Ingredient[];
 }
 

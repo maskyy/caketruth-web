@@ -36,6 +36,7 @@ export const Action = {
   DELETE_DIARY_RECORD: "diaryRecord/delete",
   ADD_PRODUCT: "product/add",
   UPDATE_PRODUCT: "product/update",
+  RESET_SUCCEEDED: "succeeded/reset",
 };
 
 export const registerUser = createAsyncThunk<User, UserSignup, { extra: Extra }>(
@@ -281,3 +282,5 @@ export const updateProduct = createAsyncThunk<Product, ProductUpdate, { extra: E
     }
   }
 );
+
+export const resetSucceeded = createAction(Action.RESET_SUCCEEDED);

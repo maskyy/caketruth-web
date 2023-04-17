@@ -1,7 +1,7 @@
 import { createReducer } from "@reduxjs/toolkit";
 import { User } from "../types/User";
 import { AuthStatus } from "../types/AuthStatus";
-import { addDiaryRecord, addProduct, deleteDiaryRecord, fetchDiary, fetchMeals, fetchProduct, fetchProductBrands, fetchProductCategories, fetchProducts, fetchRecipe, fetchRecipeCategories, fetchRecipes, fetchUser, loginUser, logoutUser, refreshToken, registerUser, setAuthStatus, setMeals, updateDiaryRecord, updateProduct, updateUser } from "./action";
+import { addDiaryRecord, addProduct, deleteDiaryRecord, fetchDiary, fetchMeals, fetchProduct, fetchProductBrands, fetchProductCategories, fetchProducts, fetchRecipe, fetchRecipeCategories, fetchRecipes, fetchUser, loginUser, logoutUser, refreshToken, registerUser, resetSucceeded, setAuthStatus, setMeals, updateDiaryRecord, updateProduct, updateUser } from "./action";
 import { Token } from "../util/token";
 import { getAuthStatus } from "../util/util";
 import { ServerErrors } from "../types/api";
@@ -27,7 +27,7 @@ type State = {
   product: Product | null;
   recipe: Recipe | null;
   diary: DiaryRecord[];
-}
+};
 
 const initialState: State = {
   authStatus: AuthStatus.NoAuth,
@@ -157,5 +157,8 @@ export const reducer = createReducer(initialState, (builder) => {
     })
     .addCase(updateProduct.rejected, (state, action) => {
       state.errors = action.payload as ServerErrors;
+    })
+    .addCase(resetSucceeded, (state, action) => {
+      state.succeeded = false;
     });
 });

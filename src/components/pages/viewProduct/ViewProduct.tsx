@@ -63,11 +63,14 @@ export const ViewProduct = () => {
       return null;
     }
 
-    let value: string | number = v;
+    let value: string | number | undefined = v;
     if (entry.categories) {
-      value = entry.categories.find((c) => c.id === v)!.title;
+      value = entry.categories.find((c) => c.id === v)?.title;
+      if (value === undefined) {
+        return null;
+      }
     } else if (entry.mass) {
-      value = +value;
+      value = Number(value);
       if (whole && product.net_grams) {
         value = value * mass * (product.net_grams);
       } else if (drained && product.net_grams && product.drained_grams) {
