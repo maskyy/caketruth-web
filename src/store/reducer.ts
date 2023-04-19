@@ -1,7 +1,7 @@
 import { createReducer } from "@reduxjs/toolkit";
 import { User } from "../types/User";
 import { AuthStatus } from "../types/AuthStatus";
-import { addDiaryRecord, addProduct, deleteDiaryRecord, fetchDiary, fetchMeals, fetchProduct, fetchProductBrands, fetchProductCategories, fetchProducts, fetchRecipe, fetchRecipeCategories, fetchRecipes, fetchUser, loginUser, logoutUser, refreshToken, registerUser, resetSucceeded, setAuthStatus, setMeals, updateDiaryRecord, updateProduct, updateUser } from "./action";
+import { addDiaryRecord, addProduct, addRecipe, deleteDiaryRecord, fetchDiary, fetchMeals, fetchProduct, fetchProductBrands, fetchProductCategories, fetchProducts, fetchRecipe, fetchRecipeCategories, fetchRecipes, fetchUser, loginUser, logoutUser, refreshToken, registerUser, resetSucceeded, setAuthStatus, setMeals, updateDiaryRecord, updateProduct, updateRecipe, updateUser } from "./action";
 import { Token } from "../util/token";
 import { getAuthStatus } from "../util/util";
 import { ServerErrors } from "../types/api";
@@ -158,7 +158,27 @@ export const reducer = createReducer(initialState, (builder) => {
     .addCase(updateProduct.rejected, (state, action) => {
       state.errors = action.payload as ServerErrors;
     })
-    .addCase(resetSucceeded, (state, action) => {
+    .addCase(resetSucceeded, (state) => {
+      state.errors = null;
       state.succeeded = false;
-    });
+    })
+    .addCase(addRecipe.fulfilled, (state, action) => {
+      state.recipes = [...state.recipes, action.payload];
+      state.succeeded = true;
+    })
+    .addCase(addRecipe.rejected, (state, action) => {
+      state.errors = action.payload as ServerErrors;
+    })
+    .addCase(updateRecipe.fulfilled, (state, action) => {
+      state.recipes = state.recipes.map((r) => {
+        if (r.id !== action.payload.id) {
+          return r;
+        }
+        return action.payload;
+      });
+      state.succeeded = true;
+    })
+    .addCase(updateRecipe.rejected, (state, action) => {
+      state.errors = action.payload as ServerErrors;
+    })
 });

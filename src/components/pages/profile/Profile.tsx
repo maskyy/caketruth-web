@@ -17,7 +17,7 @@ export const Profile = () => {
     const form = e.currentTarget;
     const formData = new FormData(form) as Iterable<[UserUpdate]>;
     const data: UserUpdate = Object.fromEntries(formData);
-    console.log(data);
+
     dispatch(updateUser(data));
   }
   return (

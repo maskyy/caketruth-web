@@ -5,7 +5,7 @@ import { AuthResponse, ServerErrors } from "../types/api";
 import { AuthStatus } from "../types/AuthStatus";
 import { Meal } from "../types/Meal";
 import { BasicProduct, Product, ProductUpdate } from "../types/Product";
-import { BasicRecipe, Recipe } from "../types/Recipe";
+import { BasicRecipe, Recipe, RecipeUpdate } from "../types/Recipe";
 import { Category } from "../types/Category";
 import { DiaryData, DiaryRecord, DiaryUpdate } from "../types/DiaryRecord";
 
@@ -37,6 +37,10 @@ export const Action = {
   ADD_PRODUCT: "product/add",
   UPDATE_PRODUCT: "product/update",
   RESET_SUCCEEDED: "succeeded/reset",
+  ADD_RECIPE: "recipe/add",
+  UPDATE_RECIPE: "recipe/update",
+  RESET_PRODUCT: "product/reset",
+  RESET_RECIPE: "recipe/reset",
 };
 
 export const registerUser = createAsyncThunk<User, UserSignup, { extra: Extra }>(
@@ -284,3 +288,39 @@ export const updateProduct = createAsyncThunk<Product, ProductUpdate, { extra: E
 );
 
 export const resetSucceeded = createAction(Action.RESET_SUCCEEDED);
+
+export const addRecipe = createAsyncThunk<Recipe, RecipeUpdate, { extra: Extra }>(
+  Action.ADD_RECIPE,
+  async (update, { extra, rejectWithValue }) => {
+    const { api } = extra;
+    try {
+      const { data } = await api.post<Recipe>("/recipes/", update);
+      return data;
+    } catch (err) {
+      const error = err as AxiosError<ServerErrors>;
+      if (!error.response) {
+        throw error;
+      }
+      return rejectWithValue(error.response?.data);
+    }
+  }
+);
+
+export const updateRecipe = createAsyncThunk<Recipe, RecipeUpdate, { extra: Extra }>(
+  Action.UPDATE_RECIPE,
+  async (update, { extra, rejectWithValue }) => {
+    const { api } = extra;
+    const { id } = update;
+    delete update.id;
+    try {
+      const { data } = await api.patch<Recipe>(`/recipes/${id}/`, update);
+      return data;
+    } catch (err) {
+      const error = err as AxiosError<ServerErrors>;
+      if (!error.response) {
+        throw error;
+      }
+      return rejectWithValue(error.response?.data);
+    }
+  }
+);

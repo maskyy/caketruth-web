@@ -4,7 +4,7 @@ import { PageLayout } from "../../layouts/PageLayout";
 import "react-tabs/style/react-tabs.css";
 import { Link, useLocation } from "react-router-dom";
 import { useAppSelector } from "../../../hooks";
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { CgSearch } from "react-icons/cg";
 
 export const Products = () => {

@@ -20,6 +20,7 @@ export const ViewRecipe = () => {
   const meals = useAppSelector((state) => state.meals);
   const recipeCategories = useAppSelector((state) => state.recipeCategories);
   const productBrands = useAppSelector((state) => state.productBrands);
+  const user = useAppSelector((state) => state.user);
 
   const navigate = useNavigate();
   const [mass, setMass] = useState(recipe?.mass ?? 100);
@@ -166,11 +167,14 @@ export const ViewRecipe = () => {
             </tbody>
           </table>
         </section>
-        <section>
+        <section className="border-b-2 border-gray-200">
           <h2 className="text-center">Приготовление</h2>
           {renderedDirections}
         </section>
       </div>
+      {((user?.id === recipe.user && !recipe.is_verified) || user?.role.name !== "user") && <div className="flex flex-col items-center">
+        <Link to="edit">Редактировать</Link>
+      </div>}
     </PageLayout>
   );
 }

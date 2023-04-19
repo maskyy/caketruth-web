@@ -16,12 +16,16 @@ export const EditProduct = () => {
   const location = useLocation();
   const id = Number(useParams().id);
   const user = useAppSelector((state) => state.user);
-  const product = useAppSelector((state) => state.product);
+  const isNew = location.pathname === "/products/new";
+  let product = useAppSelector((state) => state.product);
   const isLoading = useAppSelector((state) => state.isLoading);
   const productCategories = useAppSelector((state) => state.productCategories);
   const productBrands = useAppSelector((state) => state.productBrands);
   const succeeded = useAppSelector((state) => state.succeeded);
-  const isNew = location.pathname === "/products/new";
+
+  if (isNew) {
+    product = null;
+  }
 
   useEffect(() => {
     if (id) {

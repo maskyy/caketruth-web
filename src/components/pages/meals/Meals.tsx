@@ -16,7 +16,6 @@ export const Meals = () => {
       return;
     }
     setCount(amount);
-    navigate("/diary");
   };
 
   const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -26,6 +25,7 @@ export const Meals = () => {
     const names: string[] = Object.values(Object.fromEntries(formData));
     names.shift();
     dispatch(setMeals(names));
+    navigate("/diary");
   };
 
   const renderedFields = Array.from({ length: count }).map((_, idx) => {
