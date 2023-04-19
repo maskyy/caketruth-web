@@ -1,9 +1,5 @@
-import { PageLayout } from "../../layouts/PageLayout";
+import { Navigate } from "react-router-dom";
 
 export const Welcome = () => {
-  return (
-    <PageLayout title="CakeTruth" footer>
-      hello world
-    </PageLayout>
-  );
+  return <Navigate to="/products" />;
 }

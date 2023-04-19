@@ -11,7 +11,7 @@ export const ErrorField = ({field}: ErrorFieldProps) => {
   if (!errors || !errors[field]) {
     return null;
   }
-  const text = errors[field][0];
+  const text = Array.isArray(errors[field]) ? errors[field][0] : errors[field] as string;
   return (
     <p>{errorTranslations[text] ?? text}</p>
   )

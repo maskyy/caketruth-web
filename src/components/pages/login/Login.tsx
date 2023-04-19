@@ -7,6 +7,7 @@ import { fetchUser, loginUser } from "../../../store/action";
 import { AuthStatus } from "../../../types/AuthStatus";
 import { Token } from "../../../util/token";
 import { useNavigate } from "react-router-dom";
+import { ErrorField } from "../../error_field/ErrorField";
 
 export const Login = () => {
   const dispatch = useAppDispatch();
@@ -45,7 +46,7 @@ export const Login = () => {
         <div className="flex justify-center">
           <button type="submit">Войти</button>
         </div>
-        {errors && <div>{errors.detail}</div>}
+        <ErrorField field="detail" />
       </form>
     </PageLayout>
   );

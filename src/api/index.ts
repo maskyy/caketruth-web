@@ -41,7 +41,7 @@ const createResponseInterceptor = () => {
   const interceptor = api.interceptors.response.use(
     (response) => response,
     (error) => {
-      if (error.response.status !== HttpStatusCode.Unauthorized) {
+      if (error.response.status !== HttpStatusCode.Unauthorized || error.request.responseURL.includes("login")) {
         return Promise.reject(error);
       }
 
