@@ -19,3 +19,5 @@ export type UserUpdate = Partial<Omit<User, "role">> & {
   password?: string;
   password_confirm?: string;
 };
+
+export type UserBan = Partial<Pick<User, "id" | "blocked_until">>;

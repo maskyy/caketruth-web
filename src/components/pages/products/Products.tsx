@@ -92,7 +92,7 @@ export const Products = () => {
             <button type="submit"><CgSearch /></button>
           </form>
           <ul>
-            {renderedRecipes}
+          {renderedRecipes.length > 0 ? renderedRecipes : <li>По данному запросу рецептов не найдено.</li>}
           </ul>
           {user && !user.blocked_until && <Link to="/recipes/new">Добавить</Link>}
         </TabPanel>
