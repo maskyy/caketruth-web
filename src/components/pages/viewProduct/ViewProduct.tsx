@@ -6,7 +6,7 @@ import { PageLayout } from "../../layouts/PageLayout";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { Spinner } from "../../spinner/Spinner";
 import { NotFound } from "../not-found/NotFound";
-import { addDiaryRecord, fetchProduct } from "../../../store/action";
+import { addDiaryRecord, deleteDiaryRecord, fetchProduct, resetRecord, updateDiaryRecord } from "../../../store/action";
 import { Entry } from "../../../types/Entry";
 import DatePicker from "react-date-picker";
 import { DiaryData } from "../../../types/DiaryRecord";
@@ -15,6 +15,8 @@ import { DateData } from "../../../types/DateData";
 export const ViewProduct = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
+  const record = useAppSelector((state) => state.record);
   const id = Number(useParams().id);
   const product = useAppSelector((state) => state.product);
   const isLoading = useAppSelector((state) => state.isLoading);
@@ -22,10 +24,10 @@ export const ViewProduct = () => {
   const productCategories = useAppSelector((state) => state.productCategories);
   const user = useAppSelector((state) => state.user);
 
-  const [mass, setMass] = useState(100);
+  const [mass, setMass] = useState(record?.mass ?? 100);
   const [whole, setWhole] = useState(false);
   const [drained, setDrained] = useState(false);
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState(record?.added_date ? new Date(record.added_date) : new Date());
 
   const entries: Entry[] = [
     { key: "calories", title: "Калорийность", suffix: "ккал", mass: true },
@@ -126,13 +128,22 @@ export const ViewProduct = () => {
     delete data.month;
     delete data.year;
 
-    dispatch(addDiaryRecord(data));
+    if (record) {
+      dispatch(updateDiaryRecord(data));
+    } else {
+      dispatch(addDiaryRecord(data));
+    }
+    navigate("/diary");
+  };
+
+  const handleDelete = (id: number) => {
+    dispatch(deleteDiaryRecord(id));
     navigate("/diary");
   };
 
   return (
     <PageLayout
-      title="Продукт"
+      title={record ? "Редактирование записи" : "Продукт"}
       header={
         <Header icon={false}>
           <Link to="/products"><CgArrowLeft size={24} /></Link>
@@ -142,10 +153,13 @@ export const ViewProduct = () => {
       footer={false}
     >
       <form className="flex flex-col items-center" onSubmit={handleSubmit}>
-        <input type="hidden" name="food" value={id} />
+        {record
+          ? <input type="hidden" name="id" value={record.id} />
+          : <input type="hidden" name="food" value={id} />
+        }
         <div className="flex justify-between gap-2">
           <label htmlFor="mass">{whole ? "Кол-во" : "Масса"}</label>
-          <input className="w-24" type="number" name="mass" value={mass} onChange={handleMassChange} />
+          <input className="w-24" type="number" name="mass" step={0.1} value={mass} onChange={handleMassChange} />
         </div>
         {product?.net_grams && !drained && <div>
           <label>Кол-во</label>
@@ -157,7 +171,7 @@ export const ViewProduct = () => {
         </div>}
         <div className="flex justify-between gap-2">
           <label htmlFor="meal">Приём</label>
-          <select name="meal">
+          <select name="meal" defaultValue={record?.meal ?? ""}>
             {renderedMeals}
           </select>
         </div>
@@ -174,7 +188,8 @@ export const ViewProduct = () => {
             required
           />
         </div>
-        {mass > 0 && mass < 10000 && <button type="submit">Добавить в дневник</button>}
+        {mass > 0 && mass < 10000 && <button type="submit">{record ? "Обновить" : "Добавить в дневник"}</button>}
+        {record && <button type="button" onClick={() => handleDelete(record?.id)}>Удалить</button>}
       </form>
       <div className="flex flex-col items-center">
         <h2><strong>Информация о продукте</strong></h2>

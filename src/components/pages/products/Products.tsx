@@ -56,7 +56,7 @@ export const Products = () => {
   const renderedRecipes = filteredRecipes.map((r, idx) => {
     return (
       <Link key={r.id} to={`/recipes/${r.id}`}>
-        <li key={idx} className="border-green-200 border-b-2">{r.name}<br />{r.calories} ккал (100 г)</li>
+        <li key={idx} className="border-green-200 border-b-2">{r.name}<br />{r.calories} ккал</li>
       </Link>
     );
   });

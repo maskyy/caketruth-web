@@ -6,7 +6,7 @@ import { fetchMeals } from "../../../store/action";
 import { Header } from "../../header/Header";
 import DatePicker from "react-date-picker";
 import { DaySummary } from "../../day_summary/DaySummary";
-import { Meals } from "../../meals/Meals";
+import { MealRecords } from "../../meals/MealRecords";
 
 export const Diary = () => {
   const meals = useAppSelector((state) => state.meals);
@@ -47,7 +47,7 @@ export const Diary = () => {
       footer
     >
       <DaySummary records={dailyRecords} date={date} />
-      <Meals records={dailyRecords} date={date} />
+      <MealRecords records={dailyRecords} date={date} />
     </PageLayout>
   );
 }

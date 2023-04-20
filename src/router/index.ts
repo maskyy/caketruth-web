@@ -16,7 +16,7 @@ import { NotFound } from "../components/pages/not-found/NotFound";
 
 interface route {
   path: string;
-  component: () => JSX.Element;
+  component: ({...args}) => JSX.Element;
 }
 
 export const routes: route[] = [

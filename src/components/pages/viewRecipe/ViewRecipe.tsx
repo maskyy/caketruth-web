@@ -4,7 +4,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { Header } from "../../header/Header";
 import { PageLayout } from "../../layouts/PageLayout";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
-import { addDiaryRecord, fetchRecipe } from "../../../store/action";
+import { addDiaryRecord, deleteDiaryRecord, fetchRecipe, resetRecord, updateDiaryRecord } from "../../../store/action";
 import { Spinner } from "../../spinner/Spinner";
 import { NotFound } from "../not-found/NotFound";
 import { Entry } from "../../../types/Entry";
@@ -12,9 +12,12 @@ import DatePicker from "react-date-picker";
 import { DiaryData } from "../../../types/DiaryRecord";
 import { DateData } from "../../../types/DateData";
 
+
 export const ViewRecipe = () => {
   const dispatch = useAppDispatch();
   const id = Number(useParams().id);
+
+  const record = useAppSelector((state) => state.record);
   const recipe = useAppSelector((state) => state.recipe);
   const isLoading = useAppSelector((state) => state.isLoading);
   const meals = useAppSelector((state) => state.meals);
@@ -23,8 +26,8 @@ export const ViewRecipe = () => {
   const user = useAppSelector((state) => state.user);
 
   const navigate = useNavigate();
-  const [mass, setMass] = useState(recipe?.mass ?? 100);
-  const [date, setDate] = useState(new Date());
+  const [mass, setMass] = useState(recipe?.mass ?? record?.mass ?? 100);
+  const [date, setDate] = useState(record?.added_date ? new Date(record.added_date) : new Date());
 
   const entries: Entry[] = [
     { key: "calories", title: "Калорийность", suffix: "ккал", mass: true },
@@ -56,7 +59,7 @@ export const ViewRecipe = () => {
   const recipeEntries = Object.entries(recipe ?? {});
   const renderedData = recipeEntries.map(([k, v]) => {
     let entry = entries.find(t => t.key === k);
-    if (entry === undefined) {
+    if (entry === undefined || (!v && !(v === 0 && v.mass))) {
       return null;
     }
 
@@ -108,13 +111,22 @@ export const ViewRecipe = () => {
     delete data.month;
     delete data.year;
 
-    dispatch(addDiaryRecord(data));
+    if (record) {
+      dispatch(updateDiaryRecord(data));
+    } else {
+      dispatch(addDiaryRecord(data));
+    }
+    navigate("/diary");
+  };
+
+  const handleDelete = (id: number) => {
+    dispatch(deleteDiaryRecord(id));
     navigate("/diary");
   };
 
   return (
     <PageLayout
-      title="Рецепт"
+      title={record ? "Редактирование записи" : "Рецепт"}
       header={
         <Header icon={false}>
           <Link to="/recipes"><CgArrowLeft size={24} /></Link>
@@ -124,14 +136,17 @@ export const ViewRecipe = () => {
       footer={false}
     >
       <form className="flex flex-col items-center" onSubmit={handleSubmit}>
-        <input type="hidden" name="food" value={id} />
+        {record
+          ? <input type="hidden" name="id" value={record.id} />
+          : <input type="hidden" name="food" value={id} />
+        }
         <div className="flex justify-between gap-2">
           <label htmlFor="mass">Масса</label>
-          <input className="w-24" type="number" name="mass" value={mass} onChange={handleMassChange} />
+          <input className="w-24" type="number" name="mass" step={0.1} value={mass} onChange={handleMassChange} />
         </div>
         <div className="flex justify-between gap-2">
           <label htmlFor="meal">Приём</label>
-          <select name="meal">
+          <select name="meal" defaultValue={record?.meal ?? ""}>
             {renderedMeals}
           </select>
         </div>
@@ -148,7 +163,8 @@ export const ViewRecipe = () => {
             required
           />
         </div>
-        {mass > 0 && mass < 10000 && <button type="submit">Добавить в дневник</button>}
+        {mass > 0 && mass < 10000 && <button type="submit">{record ? "Обновить" : "Добавить в дневник"}</button>}
+        {record && <button type="button" onClick={() => handleDelete(record?.id)}>Удалить</button>}
       </form>
       <div className="flex flex-col items-center gap-2">
         <section>

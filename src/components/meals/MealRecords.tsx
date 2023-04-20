@@ -5,12 +5,12 @@ import { MealSummary } from "./MealSummary";
 import { MealItem } from "./MealItem";
 import { useAppSelector } from "../../hooks";
 
-interface MealsProps {
+interface MealRecordsProps {
   records: DiaryRecord[];
   date: Date;
 }
 
-export const Meals = ({ records, date }: MealsProps) => {
+export const MealRecords = ({ records, date }: MealRecordsProps) => {
   const meals = useAppSelector((state) => state.meals);
   const renderedMeals = meals.map((m) => {
     const mealRecords = records.filter((r) => r.meal === m.id);
@@ -20,7 +20,7 @@ export const Meals = ({ records, date }: MealsProps) => {
         <Link to="/products"><CgMathPlus className="absolute right-4 top-2" /></Link>
         <MealSummary records={mealRecords} date={date} />
         <ul>
-          {mealRecords.map((mr) => <MealItem item={mr} />)}
+          {mealRecords.map((mr) => <MealItem key={mr.id} item={mr} />)}
         </ul>
       </section>
     );

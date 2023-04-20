@@ -1,7 +1,7 @@
 import { createReducer } from "@reduxjs/toolkit";
 import { User } from "../types/User";
 import { AuthStatus } from "../types/AuthStatus";
-import { addDiaryRecord, addProduct, addRecipe, deleteDiaryRecord, fetchDiary, fetchMeals, fetchProduct, fetchProductBrands, fetchProductCategories, fetchProducts, fetchRecipe, fetchRecipeCategories, fetchRecipes, fetchUser, loginUser, logoutUser, refreshToken, registerUser, resetSucceeded, setAuthStatus, setMeals, updateDiaryRecord, updateProduct, updateRecipe, updateUser } from "./action";
+import { addDiaryRecord, addProduct, addRecipe, deleteDiaryRecord, fetchDiary, fetchMeals, fetchProduct, fetchProductBrands, fetchProductCategories, fetchProducts, fetchRecipe, fetchRecipeCategories, fetchRecipes, fetchRecord, fetchUser, loginUser, logoutUser, refreshToken, registerUser, resetRecord, resetSucceeded, setAuthStatus, setMeals, updateDiaryRecord, updateProduct, updateRecipe, updateUser } from "./action";
 import { Token } from "../util/token";
 import { getAuthStatus } from "../util/util";
 import { ServerErrors } from "../types/api";
@@ -27,6 +27,7 @@ type State = {
   product: Product | null;
   recipe: Recipe | null;
   diary: DiaryRecord[];
+  record: DiaryRecord | null;
 };
 
 const initialState: State = {
@@ -45,6 +46,7 @@ const initialState: State = {
   product: null,
   recipe: null,
   diary: [],
+  record: null,
 };
 
 export const reducer = createReducer(initialState, (builder) => {
@@ -111,33 +113,47 @@ export const reducer = createReducer(initialState, (builder) => {
       state.product = action.payload;
       state.isLoading = false;
     })
-    .addCase(fetchProduct.rejected, (state, action) => {
+    .addCase(fetchProduct.rejected, (state) => {
       state.isLoading = false;
     })
-    .addCase(fetchProduct.pending, (state, action) => {
+    .addCase(fetchProduct.pending, (state) => {
       state.isLoading = true;
     })
     .addCase(fetchRecipe.fulfilled, (state, action) => {
       state.recipe = action.payload;
       state.isLoading = false;
     })
-    .addCase(fetchRecipe.rejected, (state, action) => {
+    .addCase(fetchRecipe.rejected, (state) => {
       state.isLoading = false;
     })
-    .addCase(fetchRecipe.pending, (state, action) => {
+    .addCase(fetchRecipe.pending, (state) => {
       state.isLoading = true;
     })
     .addCase(fetchDiary.fulfilled, (state, action) => {
       state.diary = action.payload;
+      state.isLoading = false;
+    })
+    .addCase(fetchDiary.pending, (state) => {
+      state.isLoading = true;
+    })
+    .addCase(fetchDiary.rejected, (state) => {
+      state.isLoading = false;
     })
     .addCase(addDiaryRecord.fulfilled, (state, action) => {
       state.diary = [ ...state.diary, action.payload];
     })
     .addCase(updateDiaryRecord.fulfilled, (state, action) => {
-
+      state.diary = state.diary.map((r) => {
+        if (r.id !== action.payload.id) {
+          return r;
+        }
+        return action.payload;
+      });
     })
     .addCase(deleteDiaryRecord.fulfilled, (state, action) => {
-
+      state.diary = state.diary.filter((r) => {
+        return r.id !== action.payload;
+      });
     })
     .addCase(addProduct.fulfilled, (state, action) => {
       state.products = [...state.products, action.payload];
@@ -181,4 +197,17 @@ export const reducer = createReducer(initialState, (builder) => {
     .addCase(updateRecipe.rejected, (state, action) => {
       state.errors = action.payload as ServerErrors;
     })
+    .addCase(fetchRecord.fulfilled, (state, action) => {
+      state.record = action.payload;
+      state.isLoading = false;
+    })
+    .addCase(fetchRecord.pending, (state) => {
+      state.isLoading = true;
+    })
+    .addCase(fetchRecord.rejected, (state) => {
+      state.isLoading = false;
+    })
+    .addCase(resetRecord, (state) => {
+      state.record = null;
+    });
 });

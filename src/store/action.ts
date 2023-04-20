@@ -41,6 +41,8 @@ export const Action = {
   UPDATE_RECIPE: "recipe/update",
   RESET_PRODUCT: "product/reset",
   RESET_RECIPE: "recipe/reset",
+  FETCH_RECORD: "record/fetch",
+  RESET_RECORD: "record/reset",
 };
 
 export const registerUser = createAsyncThunk<User, UserSignup, { extra: Extra }>(
@@ -237,17 +239,17 @@ export const updateDiaryRecord = createAsyncThunk<DiaryRecord, DiaryUpdate, { ex
     const { api } = extra;
     const { id } = update;
     delete update.id;
-    const { data } = await api.patch<DiaryRecord>(`/diary/${id}`, update);
+    const { data } = await api.patch<DiaryRecord>(`/diary/${id}/`, update);
     return data;
   }
 );
 
-export const deleteDiaryRecord = createAsyncThunk<void, number, { extra: Extra }>(
+export const deleteDiaryRecord = createAsyncThunk<number, number, { extra: Extra }>(
   Action.DELETE_DIARY_RECORD,
   async (id, { extra }) => {
     const { api } = extra;
-    const { data } = await api.delete(`/diary/${id}`);
-    return data;
+    await api.delete(`/diary/${id}`);
+    return id;
   }
 );
 
@@ -324,3 +326,14 @@ export const updateRecipe = createAsyncThunk<Recipe, RecipeUpdate, { extra: Extr
     }
   }
 );
+
+export const fetchRecord = createAsyncThunk<DiaryRecord, number, { extra: Extra }>(
+  Action.FETCH_RECORD,
+  async (id, { extra }) => {
+    const { api } = extra;
+    const { data } = await api.get<DiaryRecord>(`/diary/${id}`);
+    return data;
+  }
+);
+
+export const resetRecord = createAction(Action.RESET_RECORD);
