@@ -6,4 +6,8 @@ export const errorTranslations: { [key: string]: string } = {
   "Ensure this value is less than or equal to 900.0.": "Введите число не больше 900",
   "Duplicate entries not allowed": "Продукты не должны повторяться",
   "No active account found with the given credentials": "Аккаунт с данным логином и паролем не найден",
+  "user with this username already exists.": "Псевдоним занят",
+  "user with this email already exists.": "Почтовый адрес занят",
+  "Passwords do not match.": "Пароли не совпадают",
+  "Enter a valid email address.": "Введите корректную почту",
 };

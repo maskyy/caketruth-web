@@ -12,7 +12,6 @@ import { ErrorField } from "../../error_field/ErrorField";
 export const Login = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const errors = useAppSelector((state) => state.errors);
   const authStatus = useAppSelector((state) => state.authStatus);
 
   const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -46,7 +45,9 @@ export const Login = () => {
         <div className="flex justify-center">
           <button type="submit">Войти</button>
         </div>
-        <ErrorField field="detail" />
+        <div className="mx-4 text-red-600">
+          <ErrorField field="detail" />
+        </div>
       </form>
     </PageLayout>
   );
