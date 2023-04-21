@@ -6,11 +6,11 @@ import { UserUpdate } from "../../../types/User";
 import { Link } from "react-router-dom";
 import { CgLogOut, CgRedo } from "react-icons/cg";
 import { updateUser } from "../../../store/action";
+import { ErrorField } from "../../error_field/ErrorField";
 
 export const Profile = () => {
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.user);
-  const authStatus = useAppSelector((state) => state.authStatus);
 
   const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -28,17 +28,29 @@ export const Profile = () => {
           <label>Почта</label>
           <input type="email" name="email" defaultValue={user?.email} className="w-32 border-gray-300 border-2" />
         </div>
+        <div className="mx-4 text-red-600">
+          <ErrorField field="email" />
+        </div>
         <div className="flex justify-between mx-2">
           <label>Псевдоним</label>
           <input type="username" name="username" defaultValue={user?.username} className="w-32 border-gray-300 border-2" />
+        </div>
+        <div className="mx-4 text-red-600">
+          <ErrorField field="username" />
         </div>
         <div className="flex justify-between mx-2">
           <label>Пароль</label>
           <input type="password" name="password" className="w-32 border-gray-300 border-2" />
         </div>
+        <div className="mx-4 text-red-600">
+          <ErrorField field="password" />
+        </div>
         <div className="flex justify-between mx-2">
           <label className="text-center">Подтверждение пароля</label>
           <input type="password" name="password_confirm" className="w-32 border-gray-300 border-2" />
+        </div>
+        <div className="mx-4 text-red-600">
+          <ErrorField field="password_confirm" />
         </div>
         <div className="flex justify-center items-center flex-col">
           <button type="submit" className="flex flex-col items-center"><CgRedo size={24} /> Обновить</button>

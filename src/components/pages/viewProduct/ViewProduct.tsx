@@ -6,7 +6,7 @@ import { PageLayout } from "../../layouts/PageLayout";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { Spinner } from "../../spinner/Spinner";
 import { NotFound } from "../not-found/NotFound";
-import { addDiaryRecord, deleteDiaryRecord, fetchProduct, resetRecord, updateDiaryRecord, updateUser } from "../../../store/action";
+import { addDiaryRecord, deleteDiaryRecord, deleteProduct, fetchProduct, updateDiaryRecord, updateUser } from "../../../store/action";
 import { Entry } from "../../../types/Entry";
 import DatePicker from "react-date-picker";
 import { DiaryData } from "../../../types/DiaryRecord";
@@ -159,6 +159,11 @@ export const ViewProduct = () => {
     dispatch(updateUser(data));
   };
 
+  const handleProductDelete = (id: number) => {
+    dispatch(deleteProduct(id));
+    navigate("/products");
+  };
+
   return (
     <PageLayout
       title={record ? "Редактирование записи" : "Продукт"}
@@ -230,6 +235,7 @@ export const ViewProduct = () => {
       </div>
       {((user?.id === product.user && !product.is_verified) || user?.role.name !== "user") && <div className="flex flex-col items-center">
         <Link to="edit">Редактировать</Link>
+        <button type="button" onClick={() => handleProductDelete(product.id)}>Удалить</button>
       </div>}
       {isStaff && <form className="flex flex-col items-center" action="#" method="post" onSubmit={handleBan}>
         <input type="hidden" name="id" value={product.user} />
@@ -239,7 +245,7 @@ export const ViewProduct = () => {
           locale="ru-RU"
           clearIcon={null}
           onChange={setBanDate}
-          value={date}
+          value={banDate}
           name="blocked_until"
           required
         />

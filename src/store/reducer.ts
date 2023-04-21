@@ -1,7 +1,7 @@
 import { createReducer } from "@reduxjs/toolkit";
 import { User } from "../types/User";
 import { AuthStatus } from "../types/AuthStatus";
-import { addDiaryRecord, addProduct, addRecipe, deleteDiaryRecord, fetchDiary, fetchMeals, fetchProduct, fetchProductBrands, fetchProductCategories, fetchProducts, fetchRecipe, fetchRecipeCategories, fetchRecipes, fetchRecord, fetchUser, loginUser, logoutUser, refreshToken, registerUser, resetRecord, resetSucceeded, setAuthStatus, setMeals, updateDiaryRecord, updateProduct, updateRecipe, updateUser } from "./action";
+import { addDiaryRecord, addProduct, addRecipe, deleteDiaryRecord, deleteProduct, deleteRecipe, fetchDiary, fetchMeals, fetchProduct, fetchProductBrands, fetchProductCategories, fetchProducts, fetchRecipe, fetchRecipeCategories, fetchRecipes, fetchRecord, fetchUser, loginUser, logoutUser, refreshToken, registerUser, resetRecord, resetSucceeded, setAuthStatus, setMeals, updateDiaryRecord, updateProduct, updateRecipe, updateUser } from "./action";
 import { Token } from "../util/token";
 import { getAuthStatus } from "../util/util";
 import { ServerErrors } from "../types/api";
@@ -82,6 +82,9 @@ export const reducer = createReducer(initialState, (builder) => {
         state.authStatus = getAuthStatus(action.payload);
         state.user = action.payload;
       }
+    })
+    .addCase(updateUser.rejected, (state, action) => {
+      state.errors = action.payload as ServerErrors;
     })
     .addCase(setAuthStatus, (state, action) => {
       state.authStatus = action.payload;
@@ -209,5 +212,11 @@ export const reducer = createReducer(initialState, (builder) => {
     })
     .addCase(resetRecord, (state) => {
       state.record = null;
+    })
+    .addCase(deleteProduct.fulfilled, (state, action) => {
+      state.products = state.products.filter((p) => p.id !== action.payload);
+    })
+    .addCase(deleteRecipe.fulfilled, (state, action) => {
+      state.recipes = state.recipes.filter((r) => r.id !== action.payload);
     });
 });

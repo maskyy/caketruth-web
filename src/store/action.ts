@@ -43,6 +43,8 @@ export const Action = {
   RESET_RECIPE: "recipe/reset",
   FETCH_RECORD: "record/fetch",
   RESET_RECORD: "record/reset",
+  DELETE_PRODUCT: "product/delete",
+  DELETE_RECIPE: "recipe/delete",
 };
 
 export const registerUser = createAsyncThunk<User, UserSignup, { extra: Extra }>(
@@ -108,7 +110,7 @@ export const fetchUser = createAsyncThunk<User, User["id"], { extra: Extra }>(
 
 export const updateUser = createAsyncThunk<User, UserUpdate, { extra: Extra }>(
   Action.UPDATE_USER,
-  async (user, { extra }) => {
+  async (user, { extra, rejectWithValue }) => {
     const { api } = extra;
     const { id } = user;
     const newData = { ...user };
@@ -122,8 +124,12 @@ export const updateUser = createAsyncThunk<User, UserUpdate, { extra: Extra }>(
     try {
       const { data } = await api.patch<User>(`/users/${id}/`, newData);
       return data;
-    } catch (error) {
-      return Promise.reject(error as AxiosError);
+    } catch (err) {
+      const error = err as AxiosError<ServerErrors>;
+      if (!error.response) {
+        throw error;
+      }
+      return rejectWithValue(error.response?.data);
     }
   }
 )
@@ -337,3 +343,21 @@ export const fetchRecord = createAsyncThunk<DiaryRecord, number, { extra: Extra 
 );
 
 export const resetRecord = createAction(Action.RESET_RECORD);
+
+export const deleteProduct = createAsyncThunk<number, number, { extra: Extra}>(
+  Action.DELETE_PRODUCT,
+  async (id, { extra }) => {
+    const { api } = extra;
+    await api.delete(`/products/${id}/`);
+    return id;
+  }
+);
+
+export const deleteRecipe = createAsyncThunk<number, number, { extra: Extra}>(
+  Action.DELETE_RECIPE,
+  async (id, { extra }) => {
+    const { api } = extra;
+    await api.delete(`/recipes/${id}/`);
+    return id;
+  }
+)

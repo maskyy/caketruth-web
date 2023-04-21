@@ -9,6 +9,7 @@ import { Header } from "../../header/Header";
 import { CgArrowLeft } from "react-icons/cg";
 import { ProductUpdate } from "../../../types/Product";
 import { ErrorField } from "../../error_field/ErrorField";
+import { AuthStatus } from "../../../types/AuthStatus";
 
 export const EditProduct = () => {
   const dispatch = useAppDispatch();
@@ -22,6 +23,8 @@ export const EditProduct = () => {
   const productCategories = useAppSelector((state) => state.productCategories);
   const productBrands = useAppSelector((state) => state.productBrands);
   const succeeded = useAppSelector((state) => state.succeeded);
+  const authStatus = useAppSelector((state) => state.authStatus);
+  const isStaff = authStatus === AuthStatus.Moderator || authStatus === AuthStatus.Admin;
 
   if (isNew) {
     product = null;
@@ -64,6 +67,13 @@ export const EditProduct = () => {
 
     if (data?.id && !+data.id) {
       delete data.id;
+    }
+
+    if (!data.net_grams) {
+      data.net_grams = null;
+    }
+    if (!data.drained_grams) {
+      data.drained_grams = null;
     }
 
     if (isNew) {
@@ -129,6 +139,20 @@ export const EditProduct = () => {
           <ErrorField field="ethanol" />
         </div>
         <div className="flex justify-between mx-2">
+          <label>Масса нетто</label>
+          <input type="number" name="net_grams" step={0.1} className="w-32 border-gray-300 border-2" defaultValue={product?.net_grams ?? ""} />
+        </div>
+        <div className="flex justify-center text-red-600">
+          <ErrorField field="net_grams" />
+        </div>
+        <div className="flex justify-between mx-2">
+          <label>Масса основного продукта</label>
+          <input type="number" name="drained_grams" step={0.1} className="w-32 border-gray-300 border-2" defaultValue={product?.drained_grams ?? ""} />
+        </div>
+        <div className="flex justify-center text-red-600">
+          <ErrorField field="drained_grams" />
+        </div>
+        <div className="flex justify-between mx-2">
           <label>Категория</label>
           <select name="product_category" defaultValue={product?.product_category}>
             <option value=""></option>
@@ -148,6 +172,16 @@ export const EditProduct = () => {
         <div className="flex justify-center text-red-600">
           <ErrorField field="product_brand" />
         </div>
+        {isStaff && <>
+          <div className="flex justify-between mx-2">
+            <label>Публичный</label>
+            <input type="checkbox" name="is_public" defaultChecked={product?.is_public} />
+          </div>
+          <div className="flex justify-between mx-2">
+            <label>Проверенный</label>
+            <input type="checkbox" name="is_verified" defaultChecked={product?.is_public} />
+          </div>
+        </>}
         <div className="flex justify-center">
           <button type="submit">{product ? "Обновить" : "Добавить"}</button>
         </div>

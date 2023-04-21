@@ -4,13 +4,15 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { Header } from "../../header/Header";
 import { PageLayout } from "../../layouts/PageLayout";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
-import { addDiaryRecord, deleteDiaryRecord, fetchRecipe, resetRecord, updateDiaryRecord } from "../../../store/action";
+import { addDiaryRecord, deleteDiaryRecord, deleteRecipe, fetchRecipe, updateDiaryRecord, updateUser } from "../../../store/action";
 import { Spinner } from "../../spinner/Spinner";
 import { NotFound } from "../not-found/NotFound";
 import { Entry } from "../../../types/Entry";
 import DatePicker from "react-date-picker";
 import { DiaryData } from "../../../types/DiaryRecord";
 import { DateData } from "../../../types/DateData";
+import { AuthStatus } from "../../../types/AuthStatus";
+import { UserBan } from "../../../types/User";
 
 
 export const ViewRecipe = () => {
@@ -24,10 +26,13 @@ export const ViewRecipe = () => {
   const recipeCategories = useAppSelector((state) => state.recipeCategories);
   const productBrands = useAppSelector((state) => state.productBrands);
   const user = useAppSelector((state) => state.user);
+  const authStatus = useAppSelector((state) => state.authStatus);
+  const isStaff = authStatus === AuthStatus.Moderator || authStatus === AuthStatus.Admin;
 
   const navigate = useNavigate();
   const [mass, setMass] = useState(recipe?.mass ?? record?.mass ?? 100);
   const [date, setDate] = useState(record?.added_date ? new Date(record.added_date) : new Date());
+  const [banDate, setBanDate] = useState(new Date());
 
   const entries: Entry[] = [
     { key: "calories", title: "Калорийность", suffix: "ккал", mass: true },
@@ -124,6 +129,24 @@ export const ViewRecipe = () => {
     navigate("/diary");
   };
 
+  const handleBan = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const formData = new FormData(form) as Iterable<[UserBan]>;
+    const data: UserBan & Partial<DateData> = Object.fromEntries(formData);
+    delete data.day;
+    delete data.month;
+    delete data.year;
+
+    console.log(data);
+    dispatch(updateUser(data));
+  };
+
+  const handleRecipeDelete = (id: number) => {
+    dispatch(deleteRecipe(id));
+    navigate("/recipes");
+  };
+
   return (
     <PageLayout
       title={record ? "Редактирование записи" : "Рецепт"}
@@ -172,6 +195,17 @@ export const ViewRecipe = () => {
           <table className="mx-2 text-center">
             <tbody>
               {renderedData}
+              {isStaff && <>
+              <tr className="border-y border-gray-300">
+                <td>Публичный/проверенный</td>
+                <td>{recipe.is_public ? "да" : "нет"}/{recipe.is_verified ? "да" : "нет"}</td>
+              </tr>
+
+              <tr className="border-y border-gray-300">
+                <td>ID автора</td>
+                <td>{recipe.user}</td>
+              </tr>
+            </>}
             </tbody>
           </table>
         </section>
@@ -190,7 +224,22 @@ export const ViewRecipe = () => {
       </div>
       {((user?.id === recipe.user && !recipe.is_verified) || user?.role.name !== "user") && <div className="flex flex-col items-center">
         <Link to="edit">Редактировать</Link>
+        <button type="button" onClick={() => handleRecipeDelete(recipe.id)}>Удалить</button>
       </div>}
+      {isStaff && <form className="flex flex-col items-center" action="#" method="post" onSubmit={handleBan}>
+        <input type="hidden" name="id" value={recipe.user} />
+        <label>Срок блокировки</label>
+        <DatePicker
+          format="dd.MM.y"
+          locale="ru-RU"
+          clearIcon={null}
+          onChange={setBanDate}
+          value={banDate}
+          name="blocked_until"
+          required
+        />
+        <button type="submit">Заблокировать</button>
+      </form>}
     </PageLayout>
   );
 }

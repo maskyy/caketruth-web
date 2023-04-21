@@ -1,8 +1,8 @@
 import { Food } from "./Food";
 
 export interface Product extends Food {
-  net_grams?: number;
-  drained_grams?: number;
+  net_grams?: number | null;
+  drained_grams?: number | null;
   product_category: number;
   product_brand: number;
 }
