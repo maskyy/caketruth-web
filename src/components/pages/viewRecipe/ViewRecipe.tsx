@@ -138,7 +138,6 @@ export const ViewRecipe = () => {
     delete data.month;
     delete data.year;
 
-    console.log(data);
     dispatch(updateUser(data));
   };
 
@@ -167,27 +166,29 @@ export const ViewRecipe = () => {
           <label htmlFor="mass">Масса</label>
           <input className="w-24" type="number" name="mass" step={0.1} value={mass} onChange={handleMassChange} />
         </div>
-        <div className="flex justify-between gap-2">
-          <label htmlFor="meal">Приём</label>
-          <select name="meal" defaultValue={record?.meal ?? ""}>
-            {renderedMeals}
-          </select>
-        </div>
-        <div className="flex justify-between gap-2">
-          <label htmlFor="date">Дата</label>
-          <DatePicker
-            className="self-end"
-            format="dd.MM.y"
-            locale="ru-RU"
-            clearIcon={null}
-            onChange={setDate}
-            value={date}
-            name="added_date"
-            required
-          />
-        </div>
-        {mass > 0 && mass < 10000 && <button type="submit">{record ? "Обновить" : "Добавить в дневник"}</button>}
-        {record && <button type="button" onClick={() => handleDelete(record?.id)}>Удалить</button>}
+        {user && <>
+          <div className="flex justify-between gap-2">
+            <label htmlFor="meal">Приём</label>
+            <select name="meal" defaultValue={record?.meal ?? ""}>
+              {renderedMeals}
+            </select>
+          </div>
+          <div className="flex justify-between gap-2">
+            <label htmlFor="date">Дата</label>
+            <DatePicker
+              className="self-end"
+              format="dd.MM.y"
+              locale="ru-RU"
+              clearIcon={null}
+              onChange={setDate}
+              value={date}
+              name="added_date"
+              required
+            />
+          </div>
+          {mass > 0 && mass < 10000 && <button type="submit">{record ? "Обновить" : "Добавить в дневник"}</button>}
+          {record && <button type="button" onClick={() => handleDelete(record?.id)}>Удалить</button>}
+        </>}
       </form>
       <div className="flex flex-col items-center gap-2">
         <section>
@@ -196,16 +197,16 @@ export const ViewRecipe = () => {
             <tbody>
               {renderedData}
               {isStaff && <>
-              <tr className="border-y border-gray-300">
-                <td>Публичный/проверенный</td>
-                <td>{recipe.is_public ? "да" : "нет"}/{recipe.is_verified ? "да" : "нет"}</td>
-              </tr>
+                <tr className="border-y border-gray-300">
+                  <td>Публичный/проверенный</td>
+                  <td>{recipe.is_public ? "да" : "нет"}/{recipe.is_verified ? "да" : "нет"}</td>
+                </tr>
 
-              <tr className="border-y border-gray-300">
-                <td>ID автора</td>
-                <td>{recipe.user}</td>
-              </tr>
-            </>}
+                <tr className="border-y border-gray-300">
+                  <td>ID автора</td>
+                  <td>{recipe.user}</td>
+                </tr>
+              </>}
             </tbody>
           </table>
         </section>
@@ -222,7 +223,7 @@ export const ViewRecipe = () => {
           {renderedDirections}
         </section>
       </div>
-      {((user?.id === recipe.user && !recipe.is_verified) || user?.role.name !== "user") && <div className="flex flex-col items-center">
+      {((user?.id === recipe.user && !recipe.is_verified) || isStaff) && <div className="flex flex-col items-center">
         <Link to="edit">Редактировать</Link>
         <button type="button" onClick={() => handleRecipeDelete(recipe.id)}>Удалить</button>
       </div>}

@@ -155,7 +155,6 @@ export const ViewProduct = () => {
     delete data.month;
     delete data.year;
 
-    console.log(data);
     dispatch(updateUser(data));
   };
 
@@ -192,27 +191,29 @@ export const ViewProduct = () => {
           <label>Вес основного</label>
           <input type="checkbox" onChange={handleDrainedChange} />
         </div>}
-        <div className="flex justify-between gap-2">
-          <label htmlFor="meal">Приём</label>
-          <select name="meal" defaultValue={record?.meal ?? ""}>
-            {renderedMeals}
-          </select>
-        </div>
-        <div className="flex justify-between gap-2">
-          <label htmlFor="date">Дата</label>
-          <DatePicker
-            className="self-end"
-            format="dd.MM.y"
-            locale="ru-RU"
-            clearIcon={null}
-            onChange={setDate}
-            value={date}
-            name="added_date"
-            required
-          />
-        </div>
-        {mass > 0 && mass < 10000 && <button type="submit">{record ? "Обновить" : "Добавить в дневник"}</button>}
-        {record && <button type="button" onClick={() => handleDelete(record?.id)}>Удалить</button>}
+        {user && <>
+          <div className="flex justify-between gap-2">
+            <label htmlFor="meal">Приём</label>
+            <select name="meal" defaultValue={record?.meal ?? ""}>
+              {renderedMeals}
+            </select>
+          </div>
+          <div className="flex justify-between gap-2">
+            <label htmlFor="date">Дата</label>
+            <DatePicker
+              className="self-end"
+              format="dd.MM.y"
+              locale="ru-RU"
+              clearIcon={null}
+              onChange={setDate}
+              value={date}
+              name="added_date"
+              required
+            />
+          </div>
+          {mass > 0 && mass < 10000 && <button type="submit">{record ? "Обновить" : "Добавить в дневник"}</button>}
+          {record && <button type="button" onClick={() => handleDelete(record?.id)}>Удалить</button>}
+        </>}
       </form>
       <div className="flex flex-col items-center">
         <h2><strong>Информация о продукте</strong></h2>
@@ -233,7 +234,7 @@ export const ViewProduct = () => {
           </tbody>
         </table>
       </div>
-      {((user?.id === product.user && !product.is_verified) || user?.role.name !== "user") && <div className="flex flex-col items-center">
+      {((user?.id === product.user && !product.is_verified) || isStaff) && <div className="flex flex-col items-center">
         <Link to="edit">Редактировать</Link>
         <button type="button" onClick={() => handleProductDelete(product.id)}>Удалить</button>
       </div>}

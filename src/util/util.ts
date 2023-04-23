@@ -14,13 +14,13 @@ export const getAuthStatus = ({ role }: User) => {
   }
 };
 
-export const calculateSummary = (records: DiaryRecord[], date: Date): Summary => {
+export const calculateSummary = (records: DiaryRecord[], date: Date | string): Summary => {
   let result: Summary = {
     proteins: 0,
     fats: 0,
     carbs: 0,
     calories: 0,
-    date: date.toISOString().slice(0, 10),
+    date: date instanceof Date ? date.toISOString().slice(0, 10) : date,
   };
 
   records.forEach((r) => {
